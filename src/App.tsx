@@ -199,9 +199,18 @@ function App() {
     }
   }, [navigate, page])
 
-  const handleClose = () => {
-    window.alert('학습을 종료할까요?')
-  }
+  const goToIntro = useCallback(() => {
+    setScoreWipeActive(false)
+    setExitingPage(null)
+    setDirection(null)
+    setMode(null)
+    setIsTransitioning(false)
+    clearDialogueExitSnapshot()
+    resetDialoguePopupSession()
+    resetScorePageIntroVoice()
+    stopIntroVoice()
+    setPage('intro')
+  }, [])
 
   const renderPage = (id: PageId) => {
     switch (id) {
@@ -209,14 +218,14 @@ function App() {
         return (
           <Page1Intro
             onStart={goNext}
-            onClose={handleClose}
+            onClose={goToIntro}
             isTransitioning={isTransitioning}
           />
         )
       case 'dialogue':
         return (
           <Page2Dialogue
-            onClose={handleClose}
+            onClose={goToIntro}
             onNext={beginScoreWipe}
             active={dialogueOnScreen}
             transitionComplete={dialogueOnScreen && !isTransitioning}
@@ -226,15 +235,15 @@ function App() {
         return (
           <Page4Intro
             onGo={goNext}
-            onClose={handleClose}
+            onClose={goToIntro}
             isTransitioning={isTransitioning}
           />
         )
       case 'hint':
         return (
           <Page5JamesDialogue
-            onClose={handleClose}
-            onNext={goNext}
+            onClose={goToIntro}
+            onNext={goToIntro}
             active={jamesDialogueOnScreen}
             transitionComplete={jamesDialogueOnScreen && !isTransitioning}
           />
@@ -262,7 +271,7 @@ function App() {
           <Page4Intro
             embedded
             onGo={goNext}
-            onClose={handleClose}
+            onClose={goToIntro}
             isTransitioning={isTransitioning}
           />
         </PageWipeOverlay>
