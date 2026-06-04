@@ -1,0 +1,65 @@
+/* 공통 헤더 — 전체 페이지 동일 크기·위치 (design 3333 × 5333) */
+.page-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  max-width: 375px;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: calc(
+    32px + 52 / 5333 * 100dvh + env(safe-area-inset-top, 0)
+  );
+  padding: calc(52 / 5333 * 100dvh + env(safe-area-inset-top, 0)) 12px 0
+    12px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.page-header > * {
+  pointer-events: auto;
+}
+
+.page-header__close,
+.page-header__program {
+  flex-shrink: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.page-header__close {
+  width: 32px;
+  justify-content: flex-start;
+}
+
+.page-header__program {
+  justify-content: flex-end;
+  max-width: calc(50% - 24px);
+}
+
+.page-header__close img {
+  width: calc(28px / 3);
+  height: calc(28px / 3);
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.page-header__program img {
+  height: calc(28px / 3);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* 제임스 계열 — 파란/야구 배경 위 흰색 헤더 */
+.page-header--light .page-header__close img,
+.page-header--light .page-header__program img {
+  mix-blend-mode: normal;
+  filter: brightness(0) invert(1);
+}

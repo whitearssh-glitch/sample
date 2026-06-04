@@ -1,0 +1,243 @@
+/* dialogue → score: 아래 화면 유지, 위에서 닦기만 */
+.page-wipe-overlay {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 375px;
+  height: 100dvh;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.page-wipe-overlay__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  min-height: 100dvh;
+  pointer-events: auto;
+}
+
+/* 페이지 전환 — slide(기본) | circle(1→2 원형 열림) */
+.page-transition {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.page-transition__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  min-height: 100dvh;
+}
+
+.page-transition__layer--exit-forward {
+  z-index: 1;
+  pointer-events: none;
+  animation: page-exit-forward 0.42s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.page-transition__layer--enter-forward {
+  z-index: 2;
+  animation: page-enter-forward 0.42s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.page-transition__layer--exit-back {
+  z-index: 1;
+  pointer-events: none;
+  animation: page-exit-back 0.42s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.page-transition__layer--enter-back {
+  z-index: 2;
+  animation: page-enter-back 0.42s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* 1→2: 중앙 원이 커지며 위 레이어(2페이지)가 드러남. 1페이지는 페이드 없이 유지 */
+.page-transition__layer--exit-under-circle,
+.page-transition__layer--exit-under-cover {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.page-transition__layer--enter-circle {
+  z-index: 2;
+  opacity: 1;
+  clip-path: circle(0.5% at 50% 50%);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  animation: page-reveal-circle 2s linear forwards;
+}
+
+.page-transition__layer--enter-circle--fast {
+  animation-duration: 1.3s;
+}
+
+.page-transition__layer--enter-circle-complete {
+  z-index: 2;
+  clip-path: none;
+  animation: none;
+}
+
+/* 팝업 Next → 제임스: 아래 화면 고정, 새 화면이 왼쪽→오른쪽으로 닦이듯 드러남 */
+.page-transition__layer--enter-cover-right {
+  z-index: 2;
+  opacity: 1;
+  clip-path: inset(0 0 0 100%);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  animation: page-reveal-wipe-right 2.1s linear forwards;
+}
+
+/* linear + 촘촘한 키프레임으로 초반 가속을 완만하게 (0% 원은 브라우저에서 끊김 유발) */
+@keyframes page-reveal-circle {
+  0% {
+    clip-path: circle(0.5% at 50% 50%);
+  }
+  4% {
+    clip-path: circle(1.2% at 50% 50%);
+  }
+  10% {
+    clip-path: circle(3.5% at 50% 50%);
+  }
+  18% {
+    clip-path: circle(9% at 50% 50%);
+  }
+  28% {
+    clip-path: circle(18% at 50% 50%);
+  }
+  42% {
+    clip-path: circle(38% at 50% 50%);
+  }
+  58% {
+    clip-path: circle(62% at 50% 50%);
+  }
+  76% {
+    clip-path: circle(95% at 50% 50%);
+  }
+  92% {
+    clip-path: circle(125% at 50% 50%);
+  }
+  100% {
+    clip-path: circle(150% at 50% 50%);
+  }
+}
+
+@keyframes page-exit-forward {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-26%);
+    opacity: 0;
+  }
+}
+
+@keyframes page-enter-forward {
+  from {
+    transform: translateX(26%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes page-exit-back {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(26%);
+    opacity: 0;
+  }
+}
+
+@keyframes page-enter-back {
+  from {
+    transform: translateX(-26%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 원형 열림과 같은 속도감 — 왼쪽 가장자리에서 오른쪽으로 닦아냄 (inset left ↓) */
+@keyframes page-reveal-wipe-right {
+  0% {
+    clip-path: inset(0 0 0 100%);
+  }
+  4% {
+    clip-path: inset(0 0 0 92%);
+  }
+  10% {
+    clip-path: inset(0 0 0 82%);
+  }
+  18% {
+    clip-path: inset(0 0 0 68%);
+  }
+  28% {
+    clip-path: inset(0 0 0 52%);
+  }
+  42% {
+    clip-path: inset(0 0 0 32%);
+  }
+  58% {
+    clip-path: inset(0 0 0 16%);
+  }
+  76% {
+    clip-path: inset(0 0 0 5%);
+  }
+  92% {
+    clip-path: inset(0 0 0 1%);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition__layer--exit-forward,
+  .page-transition__layer--exit-back,
+  .page-transition__layer--exit-forward,
+  .page-transition__layer--exit-back,
+  .page-transition__layer--exit-under-circle,
+  .page-transition__layer--exit-under-cover {
+    animation: page-fade-out 0.22s ease forwards;
+  }
+
+  .page-transition__layer--enter-forward,
+  .page-transition__layer--enter-back,
+  .page-transition__layer--enter-cover-right,
+  .page-transition__layer--enter-circle {
+    clip-path: none;
+    animation: page-fade-in 0.22s ease forwards;
+  }
+}
+
+@keyframes page-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

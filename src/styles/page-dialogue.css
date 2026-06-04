@@ -1,0 +1,249 @@
+/* Page 2 — dialogue (design canvas 3333 × 5333) */
+.page-dialogue {
+  --design-w: 3333;
+  --design-h: 5333;
+  --character-w: 1964;
+  --character-top: 248;
+  --replay-x: 2140;
+  --replay-y: 2860;
+  --hints-x: 280;
+  --hints-y: 3380;
+  --mic-bottom: 72;
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.page-dialogue__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.page-dialogue__content {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  max-width: 375px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+}
+
+.page-dialogue__character-wrap {
+  position: absolute;
+  top: calc(var(--character-top) / var(--design-h) * 100%);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(var(--character-w) / var(--design-w) * 100%);
+  max-width: calc(var(--character-w) / var(--design-w) * 375px);
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+  isolation: isolate;
+}
+
+.page-dialogue__character-halo {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: 88%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(240, 155, 185, 0.92) 0%,
+    rgba(228, 135, 170, 0.72) 24%,
+    rgba(215, 115, 155, 0.45) 42%,
+    rgba(200, 100, 140, 0.18) 56%,
+    transparent 70%
+  );
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(6px);
+  box-shadow:
+    0 0 40px 16px rgba(220, 120, 160, 0.55),
+    0 0 76px 30px rgba(210, 105, 150, 0.32);
+}
+
+.page-dialogue__character-halo--outer {
+  top: 44%;
+  width: 118%;
+  background: radial-gradient(
+    circle,
+    rgba(225, 140, 175, 0.48) 0%,
+    rgba(210, 120, 160, 0.24) 38%,
+    transparent 64%
+  );
+  filter: blur(14px);
+  box-shadow: 0 0 96px 42px rgba(205, 110, 150, 0.36);
+  z-index: -1;
+}
+
+.page-dialogue__character {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.page-dialogue__replay {
+  position: absolute;
+  left: calc(var(--replay-x) / var(--design-w) * 100%);
+  top: calc(var(--replay-y) / var(--design-h) * 100%);
+  transform: translate(-50%, -50%);
+  width: calc(323 / var(--design-w) * min(100vw, 375px));
+  z-index: 3;
+}
+
+.page-dialogue__replay img {
+  width: 100%;
+  height: auto;
+}
+
+.page-dialogue__replay.pressable--no-hover:hover,
+.page-dialogue__replay.pressable--no-hover:active {
+  filter: none;
+  transform: translate(-50%, -50%);
+}
+
+.page-dialogue__hints {
+  position: absolute;
+  left: calc(var(--hints-x) / var(--design-w) * 100%);
+  top: calc(var(--hints-y) / var(--design-h) * 100%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(10 / var(--design-w) * min(100vw, 375px));
+}
+
+.page-dialogue__hint-bulb {
+  width: calc(278 / var(--design-w) * min(100vw, 375px));
+  height: auto;
+  margin-left: calc(4 / var(--design-w) * min(100vw, 375px));
+}
+
+.page-dialogue__hint-chips {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(10 / var(--design-w) * min(100vw, 375px));
+}
+
+.dialogue-hint img {
+  height: calc(193 / var(--design-w) * min(100vw, 375px));
+  width: auto;
+}
+
+.page-dialogue__controls {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.page-dialogue__mic-area {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--mic-bottom) / var(--design-h) * 100%);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(630 / var(--design-w) * min(100vw, 375px));
+  z-index: 2;
+}
+
+.page-dialogue__mic-wrap {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+
+/* 전구와 같은 방식 — 부드러운 분홍 radial 글로우 */
+.page-dialogue__mic-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 158%;
+  height: 158%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(240, 155, 185, 0.55) 0%,
+    rgba(228, 135, 170, 0.28) 45%,
+    transparent 72%
+  );
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+}
+
+/* 제임스 — 리플레이 위치는 올리비아 조정 전 좌표 유지 */
+.page-dialogue--james {
+  --replay-y: 2780;
+}
+
+/* 제임스 — 연한 푸른 할로 (은은하게) */
+.page-dialogue--james .page-dialogue__character-halo {
+  background: radial-gradient(
+    circle,
+    rgba(175, 225, 255, 0.62) 0%,
+    rgba(140, 205, 252, 0.44) 24%,
+    rgba(110, 185, 248, 0.28) 42%,
+    rgba(90, 170, 240, 0.1) 56%,
+    transparent 70%
+  );
+  filter: blur(8px);
+  box-shadow:
+    0 0 36px 14px rgba(100, 190, 255, 0.32),
+    0 0 64px 24px rgba(80, 175, 245, 0.18);
+}
+
+.page-dialogue--james .page-dialogue__character-halo--outer {
+  background: radial-gradient(
+    circle,
+    rgba(150, 210, 255, 0.3) 0%,
+    rgba(120, 190, 248, 0.14) 38%,
+    transparent 64%
+  );
+  filter: blur(16px);
+  box-shadow: 0 0 80px 36px rgba(90, 175, 240, 0.2);
+}
+
+.page-dialogue--james .page-dialogue__mic-glow {
+  background: radial-gradient(
+    circle,
+    rgba(175, 225, 255, 0.36) 0%,
+    rgba(130, 200, 250, 0.16) 45%,
+    transparent 72%
+  );
+}
+
+.page-dialogue__mic {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.page-dialogue__mic img {
+  width: 100%;
+  height: auto;
+}
+
+.page-dialogue__mic.pressable--no-hover:hover,
+.page-dialogue__mic.pressable--no-hover:active {
+  filter: none;
+  transform: none;
+}

@@ -1,0 +1,481 @@
+/* 2페이지 등장 시퀀스 — hero(전환 중) → voice → controls */
+
+@keyframes dialogue-hero-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes dialogue-control-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hint-bulb-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px rgba(255, 193, 7, 0.45))
+      drop-shadow(0 0 10px rgba(255, 214, 0, 0.25));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(255, 193, 7, 0.95))
+      drop-shadow(0 0 22px rgba(255, 214, 0, 0.75))
+      brightness(1.08);
+  }
+}
+
+.page-dialogue .page-header,
+.page-dialogue__character-wrap {
+  opacity: 0;
+}
+
+.page-dialogue--hero .page-header,
+.page-dialogue--hero .page-dialogue__character-wrap,
+.page-dialogue--voice .page-dialogue__character-wrap,
+.page-dialogue--halo-fade .page-dialogue__character-wrap {
+  opacity: 1;
+}
+
+@keyframes dialogue-header-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-dialogue--hero .page-header {
+  animation: dialogue-header-in 0.55s ease-out forwards;
+}
+
+.page-dialogue--hero .page-dialogue__character-wrap {
+  animation: dialogue-hero-in 0.65s 0.08s ease-out forwards;
+}
+
+/* 음성 중 펄스 — 끝에서 opacity 1 유지 (소멸은 halo-fade 단계) */
+@keyframes dialogue-character-halo-pulse {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  18% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(0.94);
+  }
+  42% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.14);
+  }
+  62% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  82% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+@keyframes dialogue-character-halo-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+
+@keyframes dialogue-character-edge-glow {
+  0% {
+    filter: drop-shadow(0 0 10px rgba(220, 125, 165, 0.45));
+  }
+  42% {
+    filter: drop-shadow(0 0 24px rgba(235, 150, 185, 0.85))
+      drop-shadow(0 0 52px rgba(210, 110, 155, 0.5));
+  }
+  62% {
+    filter: drop-shadow(0 0 14px rgba(225, 135, 175, 0.55));
+  }
+  100% {
+    filter: drop-shadow(0 0 20px rgba(230, 145, 180, 0.75))
+      drop-shadow(0 0 40px rgba(210, 110, 155, 0.4));
+  }
+}
+
+@keyframes dialogue-character-edge-glow-out {
+  from {
+    filter: drop-shadow(0 0 20px rgba(230, 145, 180, 0.75))
+      drop-shadow(0 0 40px rgba(210, 110, 155, 0.4));
+  }
+  to {
+    filter: drop-shadow(0 0 6px rgba(220, 125, 165, 0.15));
+  }
+}
+
+.page-dialogue--voice .page-dialogue__character-halo,
+.page-dialogue--voice .page-dialogue__character-halo--outer {
+  animation: dialogue-character-halo-pulse var(--voice-duration, 2.8s)
+    ease-in-out forwards;
+}
+
+.page-dialogue--voice .page-dialogue__character {
+  animation: dialogue-character-edge-glow var(--voice-duration, 2.8s)
+    ease-in-out forwards;
+}
+
+@keyframes dialogue-character-edge-glow-james {
+  0% {
+    filter: drop-shadow(0 0 8px rgba(120, 195, 255, 0.28));
+  }
+  42% {
+    filter: drop-shadow(0 0 18px rgba(150, 215, 255, 0.5))
+      drop-shadow(0 0 36px rgba(100, 180, 245, 0.28));
+  }
+  62% {
+    filter: drop-shadow(0 0 12px rgba(135, 205, 252, 0.34));
+  }
+  100% {
+    filter: drop-shadow(0 0 16px rgba(145, 210, 255, 0.48))
+      drop-shadow(0 0 28px rgba(95, 175, 240, 0.22));
+  }
+}
+
+@keyframes dialogue-character-edge-glow-out-james {
+  from {
+    filter: drop-shadow(0 0 16px rgba(145, 210, 255, 0.48))
+      drop-shadow(0 0 28px rgba(95, 175, 240, 0.22));
+  }
+  to {
+    filter: drop-shadow(0 0 4px rgba(120, 195, 255, 0.08));
+  }
+}
+
+@keyframes dialogue-mic-img-glow-james {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 5px rgba(140, 205, 255, 0.28))
+      drop-shadow(0 0 10px rgba(100, 180, 245, 0.16));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(160, 220, 255, 0.52))
+      drop-shadow(0 0 20px rgba(105, 185, 248, 0.32));
+    brightness: 1.03);
+  }
+}
+
+@keyframes dialogue-mic-img-glow-out-james {
+  from {
+    filter: drop-shadow(0 0 8px rgba(150, 215, 255, 0.45))
+      drop-shadow(0 0 16px rgba(100, 180, 245, 0.26));
+  }
+  to {
+    filter: drop-shadow(0 0 3px rgba(120, 195, 255, 0.08));
+  }
+}
+
+.page-dialogue--james.page-dialogue--voice .page-dialogue__character {
+  animation: dialogue-character-edge-glow-james var(--voice-duration, 2.8s)
+    ease-in-out forwards;
+}
+
+.page-dialogue--james.page-dialogue--halo-fade .page-dialogue__character {
+  animation: dialogue-character-edge-glow-out-james 0.55s ease-out forwards;
+}
+
+@keyframes dialogue-mic-glow-pulse-james {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+  50% {
+    opacity: 0.62;
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+
+.page-dialogue--james.page-dialogue--mic-active .page-dialogue__mic-glow {
+  animation: dialogue-mic-glow-pulse-james 2.2s ease-in-out infinite;
+}
+
+.page-dialogue--james.page-dialogue--mic-active .page-dialogue__mic img {
+  animation: dialogue-mic-img-glow-james 2.2s ease-in-out infinite;
+}
+
+.page-dialogue--james.page-dialogue--mic-halo-fade .page-dialogue__mic img {
+  animation: dialogue-mic-img-glow-out-james 0.55s ease-out forwards;
+}
+
+/* 마이크(말하기) 중 — 전구와 같은 방식, 분홍 글로우 */
+@keyframes dialogue-mic-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+
+@keyframes dialogue-mic-img-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px rgba(235, 150, 185, 0.45))
+      drop-shadow(0 0 14px rgba(210, 110, 155, 0.28));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px rgba(240, 155, 185, 0.9))
+      drop-shadow(0 0 28px rgba(215, 115, 155, 0.6));
+    brightness: 1.06);
+  }
+}
+
+@keyframes dialogue-mic-glow-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+}
+
+@keyframes dialogue-mic-img-glow-out {
+  from {
+    filter: drop-shadow(0 0 12px rgba(235, 150, 185, 0.75))
+      drop-shadow(0 0 24px rgba(210, 110, 155, 0.45));
+  }
+  to {
+    filter: drop-shadow(0 0 4px rgba(220, 125, 165, 0.12));
+  }
+}
+
+.page-dialogue--mic-active .page-dialogue__mic-glow {
+  animation: dialogue-mic-glow-pulse 2.2s ease-in-out infinite;
+}
+
+.page-dialogue--mic-active .page-dialogue__mic img {
+  animation: dialogue-mic-img-glow 2.2s ease-in-out infinite;
+}
+
+.page-dialogue--mic-halo-fade .page-dialogue__mic-glow {
+  animation: dialogue-mic-glow-out 0.55s ease-out forwards;
+}
+
+.page-dialogue--mic-halo-fade .page-dialogue__mic img {
+  animation: dialogue-mic-img-glow-out 0.55s ease-out forwards;
+}
+
+.page-dialogue--halo-fade .page-dialogue__character-halo,
+.page-dialogue--halo-fade .page-dialogue__character-halo--outer {
+  opacity: 1;
+  animation: dialogue-character-halo-out 0.55s ease-out forwards;
+}
+
+.page-dialogue--halo-fade .page-dialogue__character {
+  animation: dialogue-character-edge-glow-out 0.55s ease-out forwards;
+}
+
+.page-dialogue--halo-fade .page-dialogue__character-wrap {
+  opacity: 1;
+}
+
+.page-dialogue__controls {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.page-dialogue--controls .page-dialogue__controls {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.page-dialogue--controls-hidden .page-dialogue__controls {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.page-dialogue--controls-hidden.page-dialogue--mic-active .page-dialogue__hint-bulb,
+.page-dialogue--controls-hidden.page-dialogue--mic-active
+  .page-dialogue__hint-bulb-wrap::before {
+  animation: none;
+  filter: none;
+  opacity: 0;
+}
+
+.page-dialogue--controls .page-dialogue__replay,
+.page-dialogue--controls .page-dialogue__hints,
+.page-dialogue--controls .page-dialogue__mic-area {
+  opacity: 0;
+}
+
+.page-dialogue--controls .page-dialogue__replay {
+  animation: dialogue-control-in 0.42s ease-out forwards;
+}
+
+.page-dialogue--controls .page-dialogue__hints {
+  animation: dialogue-control-in 0.42s 0.12s ease-out forwards;
+}
+
+.page-dialogue--controls .page-dialogue__mic-area {
+  animation: dialogue-control-in 0.42s 0.24s ease-out forwards;
+}
+
+/* 제임스 대화 — 힌트 없음, 리플레이·마이크만 */
+.page-dialogue--no-hints .page-dialogue__hints {
+  display: none;
+}
+
+.page-dialogue--no-hints.page-dialogue--controls .page-dialogue__mic-area {
+  animation: dialogue-control-in 0.42s 0.12s ease-out forwards;
+}
+
+.page-dialogue--controls .page-dialogue__hint-bulb {
+  animation: hint-bulb-glow 2.2s ease-in-out infinite;
+}
+
+/* 마이크 말하기 중 — 힌트 전구 글로우 정지 */
+.page-dialogue--mic-active .page-dialogue__hint-bulb,
+.page-dialogue--mic-halo-fade .page-dialogue__hint-bulb {
+  animation: none;
+  filter: none;
+}
+
+.page-dialogue--mic-active .page-dialogue__hint-bulb-wrap::before,
+.page-dialogue--mic-halo-fade .page-dialogue__hint-bulb-wrap::before {
+  animation: none;
+  opacity: 0;
+}
+
+.page-dialogue__hint-bulb-wrap {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.page-dialogue__hint-bulb-wrap::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130%;
+  height: 130%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 214, 0, 0.55) 0%,
+    rgba(255, 193, 7, 0.2) 45%,
+    transparent 72%
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.page-dialogue--controls .page-dialogue__hint-bulb-wrap::before {
+  animation: hint-bulb-halo 2.2s ease-in-out infinite;
+}
+
+@keyframes hint-bulb-halo {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+
+/* 전환 스냅샷 레이어 — 등장 애니 재시작 방지 */
+.page-dialogue--frozen .page-header,
+.page-dialogue--frozen .page-dialogue__character-wrap,
+.page-dialogue--frozen .page-dialogue__character,
+.page-dialogue--frozen .page-dialogue__controls,
+.page-dialogue--frozen .page-dialogue__controls *,
+.page-dialogue--frozen .page-dialogue__mic-glow,
+.page-dialogue--frozen .page-dialogue__mic img,
+.page-dialogue--frozen .page-dialogue__hint-bulb,
+.page-dialogue--frozen .page-dialogue__hint-bulb-wrap::before {
+  animation: none !important;
+  transition: none !important;
+}
+
+.page-dialogue--frozen .page-dialogue__character-wrap,
+.page-dialogue--frozen .page-header {
+  opacity: 1;
+}
+
+.page-dialogue--frozen .page-dialogue__character {
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-dialogue .page-header,
+  .page-dialogue__character-wrap,
+  .page-dialogue__controls {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    animation: none !important;
+  }
+
+  .page-dialogue__character-wrap {
+    transform: translateX(-50%);
+  }
+
+  .page-dialogue--voice .page-dialogue__character-halo,
+  .page-dialogue--voice .page-dialogue__character-halo--outer,
+  .page-dialogue--halo-fade .page-dialogue__character-halo,
+  .page-dialogue--halo-fade .page-dialogue__character-halo--outer {
+    opacity: 0.75;
+    animation: none !important;
+  }
+
+  .page-dialogue--voice .page-dialogue__character,
+  .page-dialogue--halo-fade .page-dialogue__character {
+    filter: drop-shadow(0 0 20px rgba(225, 140, 175, 0.65));
+    animation: none !important;
+  }
+
+  .page-dialogue--james.page-dialogue--voice .page-dialogue__character,
+  .page-dialogue--james.page-dialogue--halo-fade .page-dialogue__character {
+    filter: drop-shadow(0 0 16px rgba(140, 205, 255, 0.4));
+  }
+
+  .page-dialogue .page-header {
+    transform: none;
+  }
+
+  .page-dialogue__hint-bulb,
+  .page-dialogue__hint-bulb-wrap::before {
+    animation: none !important;
+    filter: drop-shadow(0 0 8px rgba(255, 193, 7, 0.6));
+  }
+}

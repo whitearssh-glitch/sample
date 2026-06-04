@@ -1,0 +1,355 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  height: 100%;
+}
+
+body {
+  font-family:
+    'Pretendard',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  background: #1a1a1a;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.app-viewport {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  background: #111;
+}
+
+.mobile-shell {
+  position: relative;
+  width: 100%;
+  max-width: 375px;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  background: #f8e8ef;
+}
+
+/* Pressable interactions */
+.pressable {
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.pressable:hover {
+  filter: brightness(1.06);
+}
+
+.pressable:active {
+  transform: scale(0.96);
+  filter: brightness(0.95);
+}
+
+.pressable--chip:hover {
+  transform: translateY(-1px);
+}
+
+.pressable--chip.is-active,
+.mission-chip.is-active,
+.dialogue-hint.is-active {
+  transform: scale(1.04);
+  filter: brightness(1.08) drop-shadow(0 4px 10px rgba(233, 30, 99, 0.35));
+}
+
+.pressable--cta:hover {
+  transform: scale(1.03);
+}
+
+.pressable--cta:active {
+  transform: scale(0.97);
+}
+
+/*
+ * Page 1 layout — sized from design canvas 3333 × 5333 (background-olivia.png).
+ * Screen width 375px → scale = 375 / 3333.
+ */
+.page-intro {
+  --design-w: 3333;
+  --design-h: 5333;
+  --frame-w: 2574;
+  --frame-h-mission: 1138;
+  /* 흰색 패널 상단선 — 리본 노치 X(36.5%/63.5%) 기준 프레임 픽셀 Y */
+  --mission-inner-top: 165;
+  --mission-ribbon-h: 193;
+  /* 리본 양옆 움푹 들어간(V노치 하단) 지점 Y */
+  --mission-notch-offset: 97;
+  --mission-title-gap: 40;
+  --mission-title-offset: 28;
+  --frame-h-character: 2617;
+  /* 캐릭터 사진 세로 중앙 ↔ 프레임 중앙 정렬 오프셋 */
+  --character-frame-shift: 154;
+  --character-picture-top: 368;
+  --scale: calc(100% / var(--design-w));
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  padding-top: calc(96 / var(--design-h) * 100dvh + env(safe-area-inset-top, 0));
+  padding-bottom: calc(96 / var(--design-h) * 100dvh + env(safe-area-inset-bottom, 0));
+  box-sizing: border-box;
+}
+
+.page-intro__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: calc(200 / var(--design-h) * 100dvh);
+  min-height: 0;
+}
+
+/* 화면 4: 미션 없이 캐릭터 카드만 세로 중앙 */
+.page-intro--solo .page-intro__body {
+  gap: 0;
+}
+
+.page-intro__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.page-intro__mission {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: calc(var(--frame-w) / var(--design-w) * 100%);
+  max-width: calc(var(--frame-w) / var(--design-w) * 375px);
+}
+
+.mission-card {
+  position: relative;
+  width: 100%;
+}
+
+.mission-card__frame {
+  width: 100%;
+  height: auto;
+}
+
+.mission-card__ribbon {
+  position: absolute;
+  top: calc(var(--mission-inner-top) / var(--frame-h-mission) * 100%);
+  left: 50%;
+  transform: translate(
+    -50%,
+    calc(var(--mission-notch-offset) / var(--mission-ribbon-h) * -100%)
+  );
+  width: calc(696 / var(--frame-w) * 100%);
+  height: auto;
+  z-index: 2;
+}
+
+.mission-card__title {
+  position: absolute;
+  top: calc(
+    (
+        var(--mission-inner-top) +
+          (var(--mission-ribbon-h) - var(--mission-notch-offset)) +
+          var(--mission-title-gap) + var(--mission-title-offset)
+      ) / var(--frame-h-mission) * 100%
+  );
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(1142 / var(--frame-w) * 100%);
+  height: auto;
+  z-index: 2;
+}
+
+.mission-card__chips {
+  position: absolute;
+  left: 50%;
+  bottom: calc(156 / var(--frame-h-mission) * 100%);
+  transform: translateX(-50%);
+  width: calc(2280 / var(--frame-w) * 100%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(75 / var(--design-w) * min(100vw, 375px));
+}
+
+.mission-card__chip-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: calc(18 / var(--frame-w) * 100%);
+  width: 100%;
+}
+
+.mission-card__chip-row--second {
+  gap: calc(14 / var(--frame-w) * 100%);
+}
+
+/* 말풍선 높이: mission-expression-04(I am __ years old) 기준 */
+.mission-card__chip-row .mission-chip img {
+  height: calc(193 / var(--design-w) * min(100vw, 375px));
+  width: auto;
+}
+
+.page-intro__character {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: calc(var(--frame-w) / var(--design-w) * 100%);
+  max-width: calc(var(--frame-w) / var(--design-w) * 375px);
+}
+
+.character-card {
+  position: relative;
+  width: 100%;
+  padding-bottom: calc(
+    var(--character-frame-shift) / var(--frame-h-character) * 100%
+  );
+}
+
+.character-card__chrome {
+  position: relative;
+  width: 100%;
+  transform: translateY(
+    calc(var(--character-frame-shift) / var(--frame-h-character) * 100%)
+  );
+}
+
+.character-card__frame {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.character-card__name {
+  position: absolute;
+  top: calc(
+    12 / var(--frame-w) * (var(--frame-w) / var(--design-w) * min(100vw, 375px))
+  );
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(982 / var(--frame-w) * 100%);
+  height: auto;
+  z-index: 5;
+}
+
+.character-card__picture {
+  position: absolute;
+  top: calc(var(--character-picture-top) / var(--frame-h-character) * 100%);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(1470 / var(--frame-w) * 100%);
+  height: auto;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.character-card__start {
+  position: absolute;
+  left: 50%;
+  bottom: calc(108 / var(--frame-h-character) * 100%);
+  transform: translateX(-50%);
+  width: calc(1138 / var(--frame-w) * 100%);
+  z-index: 4;
+}
+
+.character-card__start:hover {
+  transform: translateX(-50%);
+  filter: none;
+}
+
+.character-card__start img {
+  width: 100%;
+  height: auto;
+}
+
+/* Placeholder pages */
+.placeholder-page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  background: linear-gradient(180deg, #fce4ec 0%, #f3e5f5 100%);
+  text-align: center;
+}
+
+.placeholder-page__label {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #880e4f;
+}
+
+.placeholder-page__hint {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #5d4037;
+  line-height: 1.5;
+}
+
+.placeholder-page__back {
+  margin-top: 8px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: #e91e63;
+  color: #fff;
+  font-weight: 700;
+}
+
+@media (min-width: 376px) {
+  .mobile-shell {
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.45);
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,0 +1,510 @@
+/* 성공 팝업 — dialogue 위 오버레이 (design canvas 3333 × 5333) */
+.dialogue-popup {
+  --design-w: 3333;
+  --design-h: 5333;
+  --popup-scale: 0.82;
+  --title-lift: calc(-128 / var(--design-h) * 100dvh);
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.dialogue-popup__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 6, 14, 0.72);
+  pointer-events: none;
+}
+
+.dialogue-popup__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 375px;
+  height: 100%;
+  padding: 0 calc(56 / var(--design-w) * 100%);
+  box-sizing: border-box;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* Good·리본·Next 묶음 — 화면 정중앙 (Good transform 상향 보정 포함) */
+.dialogue-popup__cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+  transform: translateY(calc(56 / var(--design-h) * 100dvh));
+  overflow: visible;
+}
+
+/* Good / Super: 화면 위에서 거대하게 날아와 착! */
+.dialogue-popup__title {
+  width: calc(2410 / var(--design-w) * min(100vw, 375px) * var(--popup-scale));
+  max-width: 72%;
+  height: auto;
+  flex-shrink: 0;
+  margin-top: 0;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  animation: dialogue-popup-title-fly-stamp 0.64s cubic-bezier(0.1, 0.95, 0.15, 1)
+    var(--title-stamp-delay, 60ms) both;
+}
+
+@keyframes dialogue-popup-title-fly-stamp {
+  0% {
+    opacity: 0;
+    transform: scale(4.8) translateY(calc(var(--title-lift) - 480%)) rotate(-22deg);
+  }
+  52% {
+    opacity: 1;
+    transform: scale(0.88) translateY(calc(var(--title-lift) + 6%)) rotate(4deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(var(--title-lift)) rotate(0deg);
+  }
+}
+
+/* 리본 + 별: 동일 비율 박스 (좌표는 dialoguePopupLayout.ts) */
+.dialogue-popup__stars {
+  --ribbon-w: 2385;
+  --ribbon-h: 740;
+  --star-aspect: 0.95105;
+  --star-scale: 1.02;
+  position: relative;
+  width: calc(2800 / var(--design-w) * min(100vw, 375px) * var(--popup-scale));
+  max-width: 78%;
+  margin-top: calc(28 / var(--design-h) * 100dvh);
+  aspect-ratio: var(--ribbon-w) / var(--ribbon-h);
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+/* 리본: 왼쪽에서 오른쪽으로 스티커 붙이기 */
+.dialogue-popup__ribbon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  will-change: clip-path, transform;
+  animation: dialogue-popup-ribbon-stick 0.44s cubic-bezier(0.28, 0.92, 0.32, 1)
+    var(--ribbon-stick-delay, 180ms) both;
+}
+
+@keyframes dialogue-popup-ribbon-stick {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    transform: scale(1.04, 1.05);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: scale(1, 1);
+  }
+}
+
+.dialogue-popup__star-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.dialogue-popup__star-slot {
+  position: absolute;
+  box-sizing: border-box;
+  aspect-ratio: var(--star-aspect);
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.dialogue-popup__star {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scale(var(--star-scale));
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.dialogue-popup__star--stamp-1 {
+  animation: dialogue-popup-star-fly-stamp-1 0.62s cubic-bezier(0.08, 0.92, 0.12, 1)
+    var(--star-stamp-delay-1, 300ms) both;
+}
+
+.dialogue-popup__star--stamp-2 {
+  animation: dialogue-popup-star-fly-stamp-2 0.62s cubic-bezier(0.08, 0.92, 0.12, 1)
+    var(--star-stamp-delay-2, 520ms) both;
+}
+
+.dialogue-popup__star--stamp-3 {
+  animation: dialogue-popup-star-fly-stamp-3 0.62s cubic-bezier(0.08, 0.92, 0.12, 1)
+    var(--star-stamp-delay-3, 700ms) both;
+}
+
+/* 1번: 화면 밖 좌상단에서 더 크게 날아와 착! */
+@keyframes dialogue-popup-star-fly-stamp-1 {
+  0% {
+    opacity: 0;
+    transform: scale(calc(var(--star-scale) * 6.8)) translate(-300%, -420%) rotate(-48deg);
+  }
+  46% {
+    opacity: 1;
+    transform: scale(calc(var(--star-scale) * 0.62)) translate(7%, 12%) rotate(9deg);
+  }
+  62% {
+    transform: scale(calc(var(--star-scale) * 1.38)) translate(-3%, -6%) rotate(-4deg);
+  }
+  78% {
+    transform: scale(calc(var(--star-scale) * 0.86)) translate(3%, 4%) rotate(2deg);
+  }
+  92% {
+    transform: scale(calc(var(--star-scale) * 1.1)) translate(-1%, -1%) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(var(--star-scale)) translate(0, 0) rotate(0deg);
+  }
+}
+
+/* 2번: 화면 밖 우상단에서 더 크게 날아와 착! */
+@keyframes dialogue-popup-star-fly-stamp-2 {
+  0% {
+    opacity: 0;
+    transform: scale(calc(var(--star-scale) * 6.8)) translate(320%, -450%) rotate(46deg);
+  }
+  46% {
+    opacity: 1;
+    transform: scale(calc(var(--star-scale) * 0.62)) translate(-5%, 12%) rotate(-8deg);
+  }
+  62% {
+    transform: scale(calc(var(--star-scale) * 1.38)) translate(3%, -6%) rotate(4deg);
+  }
+  78% {
+    transform: scale(calc(var(--star-scale) * 0.86)) translate(-2%, 4%) rotate(-1deg);
+  }
+  92% {
+    transform: scale(calc(var(--star-scale) * 1.1)) translate(1%, -1%) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(var(--star-scale)) translate(0, 0) rotate(0deg);
+  }
+}
+
+/* 3번: 화면 위에서 크게 터지듯 착! */
+@keyframes dialogue-popup-star-fly-stamp-3 {
+  0% {
+    opacity: 0;
+    transform: scale(calc(var(--star-scale) * 7.2)) translate(0, -480%) rotate(12deg);
+  }
+  46% {
+    opacity: 1;
+    transform: scale(calc(var(--star-scale) * 0.62)) translate(0, 10%) rotate(-6deg);
+  }
+  62% {
+    transform: scale(calc(var(--star-scale) * 1.38)) translate(0, -5%) rotate(3deg);
+  }
+  78% {
+    transform: scale(calc(var(--star-scale) * 0.86)) translate(0, 3%) rotate(-1deg);
+  }
+  92% {
+    transform: scale(calc(var(--star-scale) * 1.1)) translate(0, 0) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(var(--star-scale)) translate(0, 0) rotate(0deg);
+  }
+}
+
+.dialogue-popup__next {
+  width: calc(1540 / var(--design-w) * min(100vw, 375px) * var(--popup-scale));
+  max-width: 52%;
+  margin-top: calc(360 / var(--design-h) * 100dvh);
+  line-height: 0;
+}
+
+.dialogue-popup__next img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.dialogue-popup__next.pressable--no-hover:hover,
+.dialogue-popup__next.pressable--no-hover:active {
+  filter: none;
+  transform: none;
+}
+
+/* 제임스 — 배경 이미지는 반투명, 뒤 대화 화면이 비치도록 */
+.dialogue-popup--james {
+  --james-scene-bg-opacity: 0.75;
+  --popup-scale: 0.9;
+}
+
+/* Super!: Good보다 크고 더 극적으로 날아옴 */
+.dialogue-popup--james .dialogue-popup__title {
+  width: calc(2580 / var(--design-w) * min(100vw, 375px) * var(--popup-scale));
+  max-width: 82%;
+  animation: dialogue-popup-super-fly-stamp 0.78s cubic-bezier(0.07, 1.08, 0.12, 1)
+    var(--title-stamp-delay, 100ms) both;
+}
+
+@keyframes dialogue-popup-super-fly-stamp {
+  0% {
+    opacity: 0;
+    transform: scale(7.4) translateY(calc(var(--title-lift) - 560%)) rotate(-36deg);
+    filter: brightness(1.25) saturate(1.15);
+  }
+  44% {
+    opacity: 1;
+    transform: scale(0.78) translateY(calc(var(--title-lift) + 10%)) rotate(14deg);
+    filter: brightness(1.12);
+  }
+  62% {
+    transform: scale(1.22) translateY(calc(var(--title-lift) - 4%)) rotate(-8deg);
+  }
+  82% {
+    transform: scale(1.04) translateY(calc(var(--title-lift) + 2%)) rotate(3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.12) translateY(var(--title-lift)) rotate(0deg);
+    filter: none;
+  }
+}
+
+/* 별: 뱅글뱅글 돌며 착지 */
+.dialogue-popup--james .dialogue-popup__star--stamp-1 {
+  animation: dialogue-popup-james-star-spin-1 0.8s cubic-bezier(0.09, 0.92, 0.14, 1)
+    var(--star-stamp-delay-1, 500ms) both;
+}
+
+.dialogue-popup--james .dialogue-popup__star--stamp-2 {
+  animation: dialogue-popup-james-star-spin-2 0.8s cubic-bezier(0.09, 0.92, 0.14, 1)
+    var(--star-stamp-delay-2, 660ms) both;
+}
+
+.dialogue-popup--james .dialogue-popup__star--stamp-3 {
+  animation: dialogue-popup-james-star-spin-3 0.82s cubic-bezier(0.09, 0.92, 0.14, 1)
+    var(--star-stamp-delay-3, 820ms) both;
+}
+
+@keyframes dialogue-popup-james-star-spin-1 {
+  0% {
+    opacity: 0;
+    transform: scale(calc(var(--star-scale) * 8.5)) translate(-340%, -460%) rotate(-630deg);
+  }
+  38% {
+    opacity: 1;
+    transform: scale(calc(var(--star-scale) * 0.52)) translate(9%, 15%) rotate(-270deg);
+  }
+  54% {
+    transform: scale(calc(var(--star-scale) * 1.48)) translate(-5%, -9%) rotate(-90deg);
+  }
+  70% {
+    transform: scale(calc(var(--star-scale) * 0.78)) translate(4%, 6%) rotate(180deg);
+  }
+  86% {
+    transform: scale(calc(var(--star-scale) * 1.18)) translate(-2%, -2%) rotate(450deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(var(--star-scale)) translate(0, 0) rotate(720deg);
+  }
+}
+
+@keyframes dialogue-popup-james-star-spin-2 {
+  0% {
+    opacity: 0;
+    transform: scale(calc(var(--star-scale) * 8.5)) translate(360%, -480%) rotate(680deg);
+  }
+  38% {
+    opacity: 1;
+    transform: scale(calc(var(--star-scale) * 0.52)) translate(-7%, 14%) rotate(300deg);
+  }
+  54% {
+    transform: scale(calc(var(--star-scale) * 1.48)) translate(4%, -8%) rotate(120deg);
+  }
+  70% {
+    transform: scale(calc(var(--star-scale) * 0.78)) translate(-3%, 5%) rotate(-150deg);
+  }
+  86% {
+    transform: scale(calc(var(--star-scale) * 1.18)) translate(2%, -2%) rotate(-420deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(var(--star-scale)) translate(0, 0) rotate(-720deg);
+  }
+}
+
+@keyframes dialogue-popup-james-star-spin-3 {
+  0% {
+    opacity: 0;
+    transform: scale(calc(var(--star-scale) * 9)) translate(0, -520%) rotate(-520deg);
+  }
+  38% {
+    opacity: 1;
+    transform: scale(calc(var(--star-scale) * 0.5)) translate(0, 12%) rotate(-200deg);
+  }
+  54% {
+    transform: scale(calc(var(--star-scale) * 1.5)) translate(0, -7%) rotate(60deg);
+  }
+  70% {
+    transform: scale(calc(var(--star-scale) * 0.76)) translate(0, 4%) rotate(280deg);
+  }
+  86% {
+    transform: scale(calc(var(--star-scale) * 1.2)) translate(0, -1%) rotate(520deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(var(--star-scale)) translate(0, 0) rotate(720deg);
+  }
+}
+
+.dialogue-popup--james .dialogue-popup__backdrop {
+  background: transparent;
+}
+
+.dialogue-popup__scene-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.dialogue-popup--james .dialogue-popup__scene-bg {
+  opacity: var(--james-scene-bg-opacity);
+}
+
+.dialogue-popup__confetti {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: calc(4928 / var(--design-w) * min(100vw, 375px));
+  max-width: 148%;
+  height: auto;
+  z-index: 3;
+  pointer-events: none;
+  transform-origin: center 28%;
+  will-change: transform, opacity, filter;
+  animation: dialogue-popup-confetti-pop 0.72s cubic-bezier(0.06, 1.12, 0.14, 1)
+    var(--confetti-delay, 0ms) both;
+}
+
+@keyframes dialogue-popup-confetti-pop {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10%) scale(0.04) rotate(-8deg);
+    filter: brightness(1.7) saturate(1.4) blur(3px);
+  }
+  16% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-6%) scale(1.32) rotate(4deg);
+    filter: brightness(1.35) saturate(1.2) blur(0);
+  }
+  32% {
+    transform: translateX(-50%) translateY(2%) scale(1.12) rotate(-2deg);
+    filter: brightness(1.15) saturate(1.08);
+  }
+  52% {
+    transform: translateX(-50%) scale(0.9) rotate(1deg);
+  }
+  72% {
+    transform: translateX(-50%) scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1) rotate(0deg);
+    filter: none;
+  }
+}
+
+.dialogue-popup--james .dialogue-popup__content {
+  z-index: 4;
+}
+
+/* 전환 등 재마운트 시 — 등장 애니·SFX 없이 완료 상태 */
+.dialogue-popup--settled .dialogue-popup__title {
+  animation: none;
+  opacity: 1;
+  transform: scale(1) translateY(var(--title-lift)) rotate(0deg);
+}
+
+.dialogue-popup--settled.dialogue-popup--james .dialogue-popup__title {
+  transform: scale(1.12) translateY(var(--title-lift)) rotate(0deg);
+}
+
+.dialogue-popup--settled .dialogue-popup__ribbon {
+  animation: none;
+  clip-path: inset(0 0 0 0);
+  transform: none;
+}
+
+.dialogue-popup--settled .dialogue-popup__confetti {
+  animation: none;
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+  filter: none;
+}
+
+.dialogue-popup--settled.dialogue-popup--james .dialogue-popup__scene-bg {
+  opacity: var(--james-scene-bg-opacity);
+}
+
+.dialogue-popup--settled .dialogue-popup__star--stamp-1,
+.dialogue-popup--settled .dialogue-popup__star--stamp-2,
+.dialogue-popup--settled .dialogue-popup__star--stamp-3 {
+  animation: none;
+  opacity: 1;
+  transform: scale(var(--star-scale)) rotate(0deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialogue-popup__title {
+    animation: none;
+    opacity: 1;
+    transform: translateY(var(--title-lift));
+  }
+
+  .dialogue-popup__ribbon {
+    animation: none;
+    clip-path: inset(0 0 0 0);
+    transform: none;
+  }
+
+  .dialogue-popup__confetti {
+    animation: none;
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  .dialogue-popup__star--stamp-1,
+  .dialogue-popup__star--stamp-2,
+  .dialogue-popup__star--stamp-3 {
+    animation: none;
+    opacity: 1;
+    transform: scale(var(--star-scale)) rotate(0deg);
+  }
+
+  .dialogue-popup--james .dialogue-popup__title {
+    transform: scale(1.12) translateY(var(--title-lift));
+  }
+}
