@@ -10,7 +10,7 @@ import {
 } from '../config/pageSounds'
 
 /** 닦기 전환 끝나기 전 intro 재생 (제임스 인트로) */
-export const SCORE_INTRO_VOICE_LEAD_MS = 350
+export const SCORE_INTRO_VOICE_LEAD_MS = 650
 
 let introAudio: HTMLAudioElement | null = null
 let introPlayPending = false

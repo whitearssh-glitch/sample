@@ -7,7 +7,11 @@ import { isPopupPreview } from '../config/devPreview'
 import { DIALOGUE_VOICE_FALLBACK_MS } from '../config/dialogueVoice'
 import { useDialogueMic } from '../hooks/useDialogueMic'
 import { useDialogueReveal } from '../hooks/useDialogueReveal'
-import { consumeDialogueExitSnapshot } from '../utils/dialogueExitSnapshot'
+import {
+  captureDialogueExitSnapshot,
+  consumeDialogueExitSnapshot,
+  type DialogueExitSnapshot,
+} from '../utils/dialogueExitSnapshot'
 
 const ASSETS = {
   background: '/assets/background-dialogue-olivia.png',
@@ -32,13 +36,16 @@ export function Page2Dialogue({
   transitionComplete,
   active,
 }: Page2DialogueProps) {
-  const frozenVisualRef = useRef(consumeDialogueExitSnapshot())
-  const isFrozen = Boolean(frozenVisualRef.current)
+  const consumedSnapshotRef = useRef(consumeDialogueExitSnapshot())
+  const [wipeFrozenSnapshot, setWipeFrozenSnapshot] =
+    useState<DialogueExitSnapshot | null>(null)
+  const frozenSnapshot = wipeFrozenSnapshot ?? consumedSnapshotRef.current
+  const isFrozen = Boolean(frozenSnapshot)
   const hookActive = active && !isFrozen
 
   const [activeHint, setActiveHint] = useState<number | null>(null)
   const [popupOpen, setPopupOpen] = useState(
-    () => frozenVisualRef.current?.popupOpen ?? isPopupPreview(),
+    () => consumedSnapshotRef.current?.popupOpen ?? isPopupPreview(),
   )
 
   const handleShowPopup = useCallback(() => {
@@ -95,24 +102,38 @@ export function Page2Dialogue({
         ? ({ '--voice-duration': `${responseDuration}s` } as CSSProperties)
         : undefined
 
-  const sectionClass = isFrozen
-    ? `${frozenVisualRef.current!.sectionClass} page-dialogue--frozen`
-    : [
-        'page-dialogue',
-        'page-dialogue--hero',
-        isVoicePlaying || showResponseVoiceHalo ? 'page-dialogue--voice' : '',
-        isMicListening ? 'page-dialogue--mic-active' : '',
-        isVoiceHaloFading || isResponseHaloFading
-          ? 'page-dialogue--halo-fade'
-          : '',
-        isMicHaloFading ? 'page-dialogue--mic-halo-fade' : '',
-        controlsVisible ? 'page-dialogue--controls' : '',
-        controlsHidden || popupOpen ? 'page-dialogue--controls-hidden' : '',
-      ]
-        .filter(Boolean)
-        .join(' ')
+  const buildLiveSectionClass = () =>
+    [
+      'page-dialogue',
+      'page-dialogue--hero',
+      isVoicePlaying || showResponseVoiceHalo ? 'page-dialogue--voice' : '',
+      isMicListening ? 'page-dialogue--mic-active' : '',
+      isVoiceHaloFading || isResponseHaloFading
+        ? 'page-dialogue--halo-fade'
+        : '',
+      isMicHaloFading ? 'page-dialogue--mic-halo-fade' : '',
+      controlsVisible ? 'page-dialogue--controls' : '',
+      controlsHidden || popupOpen ? 'page-dialogue--controls-hidden' : '',
+    ]
+      .filter(Boolean)
+      .join(' ')
 
-  const sectionStyle = isFrozen ? frozenVisualRef.current!.voiceStyle : voiceStyle
+  const sectionClass = isFrozen
+    ? `${frozenSnapshot!.sectionClass} page-dialogue--frozen`
+    : buildLiveSectionClass()
+
+  const sectionStyle = isFrozen ? frozenSnapshot!.voiceStyle : voiceStyle
+
+  const handleScoreWipeNext = () => {
+    const snapshot: DialogueExitSnapshot = {
+      sectionClass: buildLiveSectionClass(),
+      voiceStyle,
+      popupOpen,
+    }
+    captureDialogueExitSnapshot(snapshot)
+    setWipeFrozenSnapshot(snapshot)
+    onNext?.()
+  }
 
   const handleMicClick = () => {
     if (isFrozen || popupOpen || isVoiceActive || controlsHidden) return
@@ -239,9 +260,10 @@ export function Page2Dialogue({
           </span>
         )}
 
-        {popupOpen && (
+        {((!isFrozen && popupOpen) ||
+          (isFrozen && frozenSnapshot!.popupOpen)) && (
           <DialogueSuccessPopup
-            onNext={() => onNext?.()}
+            onNext={isFrozen ? () => {} : handleScoreWipeNext}
           />
         )}
       </section>
