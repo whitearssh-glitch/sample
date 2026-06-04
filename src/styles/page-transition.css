@@ -26,6 +26,7 @@
   width: 100%;
   min-height: 100dvh;
   overflow: hidden;
+  background: #111;
 }
 
 .page-transition__layer {

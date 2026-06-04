@@ -23,6 +23,8 @@ type Page4IntroProps = {
   isTransitioning?: boolean
   /** 닦기 오버레이 안에서는 MobileShell 생략 */
   embedded?: boolean
+  /** 닦기 중 아래 레이어 — intro는 오버레이에서만 재생 */
+  suppressIntroAudio?: boolean
 }
 
 export function Page4Intro({
@@ -30,9 +32,10 @@ export function Page4Intro({
   onClose,
   isTransitioning,
   embedded,
+  suppressIntroAudio,
 }: Page4IntroProps) {
   useEffect(() => {
-    if (isTransitioning) return
+    if (isTransitioning || suppressIntroAudio) return
 
     if (embedded) {
       const timer = scheduleScoreIntroVoiceNearWipeEnd()
@@ -40,13 +43,13 @@ export function Page4Intro({
     }
 
     playScorePageIntroVoice()
-  }, [embedded, isTransitioning])
+  }, [embedded, isTransitioning, suppressIntroAudio])
 
   const handleGo = () => {
     if (isTransitioning) return
     stopIntroVoice()
     playOpenSfx()
-    onGo()
+    requestAnimationFrame(() => onGo())
   }
 
   const content = (
@@ -95,5 +98,5 @@ export function Page4Intro({
       </section>
   )
 
-  return embedded ? content : <MobileShell>{content}</MobileShell>
+  return <MobileShell>{content}</MobileShell>
 }

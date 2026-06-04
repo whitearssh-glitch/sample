@@ -180,16 +180,16 @@ function App() {
   const beginScoreWipe = useCallback(() => {
     if (isTransitioning || scoreWipeActive || page !== 'dialogue') return
     resetScorePageIntroVoice()
+    clearDialogueExitSnapshot()
+    resetDialoguePopupSession('olivia')
+    setPage('score')
     setIsTransitioning(true)
     setScoreWipeActive(true)
   }, [isTransitioning, page, scoreWipeActive])
 
   const finishScoreWipe = useCallback(() => {
     setScoreWipeActive(false)
-    setPage('score')
     setIsTransitioning(false)
-    clearDialogueExitSnapshot()
-    resetDialoguePopupSession()
   }, [])
 
   const goBack = useCallback(() => {
@@ -237,6 +237,7 @@ function App() {
             onGo={goNext}
             onClose={goToIntro}
             isTransitioning={isTransitioning}
+            suppressIntroAudio={scoreWipeActive}
           />
         )
       case 'hint':

@@ -54,6 +54,10 @@ img {
   background: #f8e8ef;
 }
 
+.mobile-shell:has(.page-intro--solo) {
+  background: #0c1218;
+}
+
 /* Pressable interactions */
 .pressable {
   transition:

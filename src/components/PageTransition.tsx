@@ -125,7 +125,6 @@ export function PageTransition({
         </div>
       )}
       <div
-        key={`enter-${page}`}
         className={`page-transition__layer ${direction || circleRevealed ? enterClass : ''}`}
         onAnimationEnd={handleEnterAnimationEnd}
       >
