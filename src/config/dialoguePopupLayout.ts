@@ -21,6 +21,28 @@ export const DIALOGUE_POPUP_RIBBON = {
   starScale: 1.02,
 } as const
 
+/** ver2 score-star.png(408×390) — Good·Super 공통 */
+export const VER2_DIALOGUE_POPUP_STAR = {
+  starAspectRatio: 408 / 390,
+  starScale: 1.02 * 1.2 * 0.85 * 0.96 * 0.98 * (429 / 390),
+} as const
+
+/** ver2 Emma — ver2 score-ribbon.png · score-star.png(408×390) 별 슬롯 */
+export const EMMA_DIALOGUE_POPUP_RIBBON = {
+  ...DIALOGUE_POPUP_RIBBON,
+  ...VER2_DIALOGUE_POPUP_STAR,
+  slots: [
+    {
+      ...DIALOGUE_POPUP_RIBBON.slots[0],
+      centerTopPercent: 38,
+    },
+    {
+      ...DIALOGUE_POPUP_RIBBON.slots[1],
+      centerTopPercent: 38,
+    },
+  ],
+} as const
+
 /** 팝업 등장 SFX · Good/리본/별 타이밍 */
 export const DIALOGUE_POPUP_ENTRANCE = {
   /** 팝업 UI 등장 */

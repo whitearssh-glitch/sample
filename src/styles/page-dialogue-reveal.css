@@ -131,7 +131,9 @@
 }
 
 .page-dialogue--voice .page-dialogue__character-halo,
-.page-dialogue--voice .page-dialogue__character-halo--outer {
+.page-dialogue--voice .page-dialogue__character-halo--outer,
+.page-dialogue--voice .page-dialogue__character-halo--ring,
+.page-dialogue--voice .page-dialogue__character-halo--ground {
   animation: dialogue-character-halo-pulse var(--voice-duration, 2.8s)
     ease-in-out forwards;
 }
@@ -191,13 +193,89 @@
   }
 }
 
+@keyframes dialogue-character-edge-glow-emma {
+  0% {
+    filter: drop-shadow(0 0 8px rgba(95, 175, 245, 0.34));
+  }
+  42% {
+    filter: drop-shadow(0 0 18px rgba(115, 195, 255, 0.58))
+      drop-shadow(0 0 36px rgba(75, 155, 240, 0.34));
+  }
+  62% {
+    filter: drop-shadow(0 0 12px rgba(105, 185, 252, 0.42));
+  }
+  100% {
+    filter: drop-shadow(0 0 16px rgba(110, 190, 255, 0.56))
+      drop-shadow(0 0 28px rgba(70, 150, 235, 0.3));
+  }
+}
+
+@keyframes dialogue-character-edge-glow-out-emma {
+  from {
+    filter: drop-shadow(0 0 16px rgba(110, 190, 255, 0.56))
+      drop-shadow(0 0 28px rgba(70, 150, 235, 0.3));
+  }
+  to {
+    filter: drop-shadow(0 0 4px rgba(95, 175, 245, 0.1));
+  }
+}
+
+@keyframes dialogue-character-edge-glow-leo {
+  0% {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.42))
+      drop-shadow(0 0 14px rgba(175, 230, 115, 0.28));
+  }
+  42% {
+    filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.72))
+      drop-shadow(0 0 32px rgba(195, 250, 135, 0.52))
+      drop-shadow(0 0 48px rgba(145, 205, 80, 0.28));
+  }
+  62% {
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.52))
+      drop-shadow(0 0 22px rgba(185, 240, 125, 0.36));
+  }
+  100% {
+    filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.66))
+      drop-shadow(0 0 28px rgba(190, 245, 130, 0.44))
+      drop-shadow(0 0 40px rgba(140, 200, 75, 0.22));
+  }
+}
+
+@keyframes dialogue-character-edge-glow-out-leo {
+  from {
+    filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.66))
+      drop-shadow(0 0 28px rgba(190, 245, 130, 0.44));
+  }
+  to {
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.1));
+  }
+}
+
 .page-dialogue--james.page-dialogue--voice .page-dialogue__character {
   animation: dialogue-character-edge-glow-james var(--voice-duration, 2.8s)
     ease-in-out forwards;
 }
 
+.page-dialogue--emma.page-dialogue--voice .page-dialogue__character {
+  animation: dialogue-character-edge-glow-emma var(--voice-duration, 2.8s)
+    ease-in-out forwards;
+}
+
 .page-dialogue--james.page-dialogue--halo-fade .page-dialogue__character {
   animation: dialogue-character-edge-glow-out-james 0.55s ease-out forwards;
+}
+
+.page-dialogue--emma.page-dialogue--halo-fade .page-dialogue__character {
+  animation: dialogue-character-edge-glow-out-emma 0.55s ease-out forwards;
+}
+
+.page-dialogue--leo.page-dialogue--voice .page-dialogue__character {
+  animation: dialogue-character-edge-glow-leo var(--voice-duration, 2.8s)
+    ease-in-out forwards;
+}
+
+.page-dialogue--leo.page-dialogue--halo-fade .page-dialogue__character {
+  animation: dialogue-character-edge-glow-out-leo 0.55s ease-out forwards;
 }
 
 @keyframes dialogue-mic-glow-pulse-james {
@@ -288,7 +366,9 @@
 }
 
 .page-dialogue--halo-fade .page-dialogue__character-halo,
-.page-dialogue--halo-fade .page-dialogue__character-halo--outer {
+.page-dialogue--halo-fade .page-dialogue__character-halo--outer,
+.page-dialogue--halo-fade .page-dialogue__character-halo--ring,
+.page-dialogue--halo-fade .page-dialogue__character-halo--ground {
   opacity: 1;
   animation: dialogue-character-halo-out 0.55s ease-out forwards;
 }
@@ -452,8 +532,12 @@
 
   .page-dialogue--voice .page-dialogue__character-halo,
   .page-dialogue--voice .page-dialogue__character-halo--outer,
+  .page-dialogue--voice .page-dialogue__character-halo--ring,
+  .page-dialogue--voice .page-dialogue__character-halo--ground,
   .page-dialogue--halo-fade .page-dialogue__character-halo,
-  .page-dialogue--halo-fade .page-dialogue__character-halo--outer {
+  .page-dialogue--halo-fade .page-dialogue__character-halo--outer,
+  .page-dialogue--halo-fade .page-dialogue__character-halo--ring,
+  .page-dialogue--halo-fade .page-dialogue__character-halo--ground {
     opacity: 0.75;
     animation: none !important;
   }
@@ -465,8 +549,16 @@
   }
 
   .page-dialogue--james.page-dialogue--voice .page-dialogue__character,
-  .page-dialogue--james.page-dialogue--halo-fade .page-dialogue__character {
-    filter: drop-shadow(0 0 16px rgba(140, 205, 255, 0.4));
+  .page-dialogue--james.page-dialogue--halo-fade .page-dialogue__character,
+  .page-dialogue--emma.page-dialogue--voice .page-dialogue__character,
+  .page-dialogue--emma.page-dialogue--halo-fade .page-dialogue__character {
+    filter: drop-shadow(0 0 16px rgba(95, 175, 245, 0.48));
+  }
+
+  .page-dialogue--leo.page-dialogue--voice .page-dialogue__character,
+  .page-dialogue--leo.page-dialogue--halo-fade .page-dialogue__character {
+    filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.55))
+      drop-shadow(0 0 24px rgba(160, 210, 110, 0.32));
   }
 
   .page-dialogue .page-header {

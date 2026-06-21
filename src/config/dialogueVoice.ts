@@ -3,14 +3,31 @@ export type DialogueVoiceProfile = {
   responseVoiceSrc: string
 }
 
+/** public/*.mp3 교체 시 숫자를 올려 브라우저 캐시를 무효화 */
+export const VOICE_ASSET_REVISION = '2'
+
+function voiceAsset(path: string): string {
+  return `${path}?v=${VOICE_ASSET_REVISION}`
+}
+
 export const OLIVIA_DIALOGUE_VOICE: DialogueVoiceProfile = {
-  voiceSrc: '/olivia.mp3',
-  responseVoiceSrc: '/olivia2.mp3',
+  voiceSrc: voiceAsset('/olivia.mp3'),
+  responseVoiceSrc: voiceAsset('/olivia2.mp3'),
 }
 
 export const JAMES_DIALOGUE_VOICE: DialogueVoiceProfile = {
-  voiceSrc: '/james.mp3',
-  responseVoiceSrc: '/james2.mp3',
+  voiceSrc: voiceAsset('/james.mp3'),
+  responseVoiceSrc: voiceAsset('/james2.mp3'),
+}
+
+export const EMMA_DIALOGUE_VOICE: DialogueVoiceProfile = {
+  voiceSrc: voiceAsset('/emma.mp3'),
+  responseVoiceSrc: voiceAsset('/emma2.mp3'),
+}
+
+export const LEO_DIALOGUE_VOICE: DialogueVoiceProfile = {
+  voiceSrc: voiceAsset('/leo.mp3'),
+  responseVoiceSrc: voiceAsset('/leo2.mp3'),
 }
 
 /** @deprecated OLIVIA_DIALOGUE_VOICE.voiceSrc 사용 */

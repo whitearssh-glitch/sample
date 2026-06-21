@@ -1,0 +1,365 @@
+/*
+ * ver2 intro — design canvas 3333 × 5333 (260617 ai대화ui1.png)
+ */
+.page-intro-v2 {
+  --design-w: 3333;
+  --design-h: 5333;
+  --card-w: 2854;
+  --mission-h: 847;
+  --character-h: 1167;
+  --header-clearance: calc(
+    32px + 52 / var(--design-h) * 100dvh + env(safe-area-inset-top, 0)
+  );
+  /* 시안: 미션 상단 y=415, 헤더 하단 y≈84 */
+  --mission-top: calc(415 / var(--design-h) * 100dvh + env(safe-area-inset-top, 0));
+  --enter-stagger: 0.22s;
+  --enter-base: 0.18s;
+  --enter-duration: 0.72s;
+  /* lead 카드(Emma/Leo) — 모든 박스 등장 후 링 글로우 */
+  --lead-ring-after: calc(
+    var(--enter-base) + 3 * var(--enter-stagger) + var(--enter-duration)
+  );
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #fff;
+  -webkit-overflow-scrolling: touch;
+  padding-top: var(--header-clearance);
+  box-sizing: border-box;
+}
+
+.page-intro-v2__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-bottom: calc(120 / var(--design-h) * 100dvh + env(safe-area-inset-bottom, 0));
+}
+
+.page-intro-v2__mission {
+  width: calc(var(--card-w) / var(--design-w) * 100%);
+  max-width: calc(var(--card-w) / var(--design-w) * 375px);
+  margin-top: calc(var(--mission-top) - var(--header-clearance));
+  flex-shrink: 0;
+}
+
+.intro-v2-mission-card {
+  position: relative;
+  width: 100%;
+}
+
+.intro-v2-box-enter {
+  opacity: 0;
+  animation: intro-v2-box-enter var(--enter-duration) cubic-bezier(0.2, 1.1, 0.28, 1)
+    both;
+  animation-delay: calc(var(--enter-base) + var(--enter-order, 0) * var(--enter-stagger));
+  will-change: transform, opacity;
+}
+
+.intro-v2-mission-card__frame {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.intro-v2-mission-card__title {
+  position: absolute;
+  top: calc(98 / var(--mission-h) * 100%);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(1217 / var(--card-w) * 100%);
+  height: auto;
+}
+
+.intro-v2-mission-card__chips {
+  position: absolute;
+  left: 50%;
+  bottom: calc(110 / var(--mission-h) * 100%);
+  transform: translateX(-50%);
+  width: calc(2280 / var(--card-w) * 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(50 / var(--design-w) * min(100vw, 375px));
+}
+
+.intro-v2-mission-card__chip-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: calc(18 / var(--card-w) * 100%);
+  width: 100%;
+}
+
+.intro-v2-mission-card__chip-row--center {
+  justify-content: center;
+}
+
+.intro-v2-mission-card__chip-row .intro-v2-mission-chip img {
+  height: calc(193 / var(--design-w) * min(100vw, 375px));
+  width: auto;
+}
+
+.intro-v2-mission-chip.is-active {
+  transform: scale(1.04);
+  filter: brightness(1.08) drop-shadow(0 4px 10px rgba(233, 30, 99, 0.35));
+}
+
+.page-intro-v2__characters {
+  list-style: none;
+  margin: calc(84 / var(--design-h) * 100dvh) 0 0;
+  padding: 0;
+  width: calc(var(--card-w) / var(--design-w) * 100%);
+  max-width: calc(var(--card-w) / var(--design-w) * 375px);
+  display: flex;
+  flex-direction: column;
+  gap: calc(84 / var(--design-h) * 100dvh);
+}
+
+/* score-v2 — 미션 없이 캐릭터 카드만 세로 중앙 */
+.page-intro-v2--characters-only {
+  --enter-stagger: 0.16s;
+  --enter-base: 0.08s;
+  --enter-duration: 0.58s;
+  --lead-ring-after: calc(
+    var(--enter-base) + 2 * var(--enter-stagger) + var(--enter-duration)
+  );
+}
+
+.page-intro-v2--characters-only .page-intro-v2__body {
+  justify-content: center;
+}
+
+.page-intro-v2--characters-only .page-intro-v2__characters {
+  margin: 0;
+}
+
+/* circle exit — 등장 애니메이션 재실행 방지 */
+.page-transition__layer--exit-under-circle .intro-v2-box-enter {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+.page-transition__layer--exit-under-circle
+  .intro-v2-character__card--lead::before {
+  animation: none;
+  opacity: 0;
+}
+
+/* Good → score-v2 닦기 중 — 박스 숨김 (닦기 완료 후 score-v2에서 1회 등장) */
+.page-intro-v2--defer-box-enter .intro-v2-box-enter {
+  animation: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes intro-v2-box-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(calc(56 / var(--design-w) * min(100vw, 375px)));
+  }
+  58% {
+    opacity: 1;
+    transform: translateX(calc(-8 / var(--design-w) * min(100vw, 375px)));
+  }
+  80% {
+    transform: translateX(calc(4 / var(--design-w) * min(100vw, 375px)));
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.intro-v2-character {
+  width: 100%;
+}
+
+.intro-v2-character__card {
+  position: relative;
+  width: 100%;
+  --start-right: 102;
+  --start-w: 701;
+  --lock-w: 172;
+  --ring-thickness: 5px;
+}
+
+@property --ring-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* ver2 — lead 카드: 등장 후 테두리를 따라 도는 하늘색 글로우 링 */
+.page-intro-v2 .intro-v2-character__card--lead::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  --ring-angle: 0deg;
+  background: conic-gradient(
+    from var(--ring-angle),
+    transparent 0deg 240deg,
+    rgba(120, 195, 255, 0.42) 262deg,
+    rgba(155, 215, 255, 0.78) 288deg,
+    rgba(185, 230, 255, 0.98) 305deg,
+    rgba(155, 215, 255, 0.78) 322deg,
+    rgba(120, 195, 255, 0.42) 348deg,
+    transparent 360deg
+  );
+  filter: drop-shadow(0 0 8px rgba(110, 190, 255, 0.38));
+  -webkit-mask-image: var(--card-mask), var(--card-mask);
+  mask-image: var(--card-mask), var(--card-mask);
+  -webkit-mask-size:
+    100% 100%,
+    calc(100% - var(--ring-thickness) * 2) calc(100% - var(--ring-thickness) * 2);
+  mask-size:
+    100% 100%,
+    calc(100% - var(--ring-thickness) * 2) calc(100% - var(--ring-thickness) * 2);
+  -webkit-mask-position: center, center;
+  mask-position: center, center;
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-composite: source-over, destination-out;
+  mask-composite: exclude;
+  animation:
+    intro-v2-lead-ring-fade-in 0.35s ease-out var(--lead-ring-after) forwards,
+    intro-v2-lead-ring-spin 2.8s linear calc(var(--lead-ring-after) + 0.35s) infinite;
+}
+
+@keyframes intro-v2-lead-ring-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes intro-v2-lead-ring-spin {
+  to {
+    --ring-angle: 360deg;
+  }
+}
+
+/* score-v2 Leo — 초록 링 (대화 화면 글로우 톤) */
+.page-intro-v2--characters-only .intro-v2-character__card--lead::before {
+  background: conic-gradient(
+    from var(--ring-angle),
+    transparent 0deg 255deg,
+    rgba(135, 205, 70, 0.35) 280deg,
+    rgba(195, 245, 120, 0.95) 305deg,
+    rgba(135, 205, 70, 0.35) 330deg,
+    transparent 360deg
+  );
+}
+
+.intro-v2-character__card--lead {
+  --ring-thickness: 7px;
+}
+
+.intro-v2-character__bg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.intro-v2-character__name {
+  position: absolute;
+  left: calc(102 / var(--card-w) * 100%);
+  top: 50%;
+  transform: translateY(-50%);
+  height: calc(764 / var(--card-w) * 100%);
+  width: auto;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.intro-v2-character__start {
+  position: absolute;
+  right: calc(var(--start-right) / var(--card-w) * 100%);
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(var(--start-w) / var(--card-w) * 100%);
+  z-index: 2;
+}
+
+.intro-v2-character__start img {
+  width: 100%;
+  height: auto;
+}
+
+.intro-v2-character__start.pressable--no-hover:hover,
+.intro-v2-character__start.pressable--no-hover:active {
+  transform: translateY(-50%);
+  filter: none;
+}
+
+.intro-v2-character__lock {
+  position: absolute;
+  right: calc(
+    (var(--start-right) + (var(--start-w) - var(--lock-w)) / 2) / var(--card-w) *
+      100%
+  );
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(var(--lock-w) / var(--card-w) * 100%);
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.intro-v2-character__card--locked::after,
+.intro-v2-character__card--completed::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(72, 72, 72, 0.4);
+  -webkit-mask-image: var(--card-mask);
+  mask-image: var(--card-mask);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.intro-v2-character__card--locked .intro-v2-character__name,
+.intro-v2-character__card--completed .intro-v2-character__name {
+  opacity: 0.42;
+}
+
+.intro-v2-character__good {
+  position: absolute;
+  right: calc(var(--start-right) / var(--card-w) * 100%);
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(var(--start-w) / var(--card-w) * 100%);
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.mobile-shell:has(.page-intro-v2) {
+  background: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-v2-box-enter {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .page-intro-v2 .intro-v2-character__card--lead::before {
+    animation: none;
+    opacity: 0.85;
+    --ring-angle: 305deg;
+  }
+}

@@ -58,6 +58,30 @@
   animation: page-enter-back 0.42s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+/* main → intro: 단순 크로스페이드 */
+.page-transition__layer--exit-fade {
+  z-index: 1;
+  pointer-events: none;
+  animation: page-exit-fade 1.2s ease-in-out forwards;
+}
+
+.page-transition__layer--enter-fade {
+  z-index: 2;
+  animation: page-enter-fade 1.2s ease-in-out forwards;
+}
+
+/* main → ver2 intro: 전체 화면이 왼쪽으로 밀리며 다음 화면이 착착 들어옴 */
+.page-transition__layer--exit-push-left {
+  z-index: 1;
+  pointer-events: none;
+  animation: page-exit-push-left 0.64s cubic-bezier(0.22, 1.06, 0.34, 1) forwards;
+}
+
+.page-transition__layer--enter-push-left {
+  z-index: 2;
+  animation: page-enter-push-left 0.64s cubic-bezier(0.22, 1.06, 0.34, 1) forwards;
+}
+
 /* 1→2: 중앙 원이 커지며 위 레이어(2페이지)가 드러남. 1페이지는 페이드 없이 유지 */
 .page-transition__layer--exit-under-circle,
 .page-transition__layer--exit-under-cover {
@@ -68,7 +92,9 @@
 .page-transition__layer--enter-circle {
   z-index: 2;
   opacity: 1;
-  clip-path: circle(0.5% at 50% 50%);
+  --circle-x: 50%;
+  --circle-y: 50%;
+  clip-path: circle(0.5% at var(--circle-x) var(--circle-y));
   transform: translateZ(0);
   backface-visibility: hidden;
   animation: page-reveal-circle 2s linear forwards;
@@ -91,40 +117,55 @@
   clip-path: inset(0 0 0 100%);
   transform: translateZ(0);
   backface-visibility: hidden;
-  animation: page-reveal-wipe-right 2.1s linear forwards;
+  animation: page-reveal-wipe-right 1.7s linear forwards;
+}
+
+/* Good → score-v2: main→intro-v2와 동일 push-left */
+.page-wipe-overlay__layer--enter-push-left {
+  z-index: 2;
+  opacity: 1;
+  clip-path: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  animation: page-enter-push-left 0.64s cubic-bezier(0.22, 1.06, 0.34, 1) forwards;
+}
+
+.page-transition--score-wipe-push-left > .page-transition__layer {
+  animation: page-exit-push-left 0.64s cubic-bezier(0.22, 1.06, 0.34, 1) forwards;
+  pointer-events: none;
 }
 
 /* linear + 촘촘한 키프레임으로 초반 가속을 완만하게 (0% 원은 브라우저에서 끊김 유발) */
 @keyframes page-reveal-circle {
   0% {
-    clip-path: circle(0.5% at 50% 50%);
+    clip-path: circle(0.5% at var(--circle-x) var(--circle-y));
   }
   4% {
-    clip-path: circle(1.2% at 50% 50%);
+    clip-path: circle(1.2% at var(--circle-x) var(--circle-y));
   }
   10% {
-    clip-path: circle(3.5% at 50% 50%);
+    clip-path: circle(3.5% at var(--circle-x) var(--circle-y));
   }
   18% {
-    clip-path: circle(9% at 50% 50%);
+    clip-path: circle(9% at var(--circle-x) var(--circle-y));
   }
   28% {
-    clip-path: circle(18% at 50% 50%);
+    clip-path: circle(18% at var(--circle-x) var(--circle-y));
   }
   42% {
-    clip-path: circle(38% at 50% 50%);
+    clip-path: circle(38% at var(--circle-x) var(--circle-y));
   }
   58% {
-    clip-path: circle(62% at 50% 50%);
+    clip-path: circle(62% at var(--circle-x) var(--circle-y));
   }
   76% {
-    clip-path: circle(95% at 50% 50%);
+    clip-path: circle(95% at var(--circle-x) var(--circle-y));
   }
   92% {
-    clip-path: circle(125% at 50% 50%);
+    clip-path: circle(125% at var(--circle-x) var(--circle-y));
   }
   100% {
-    clip-path: circle(150% at 50% 50%);
+    clip-path: circle(150% at var(--circle-x) var(--circle-y));
   }
 }
 
@@ -172,6 +213,54 @@
   }
 }
 
+@keyframes page-exit-fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-enter-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes page-exit-push-left {
+  0% {
+    transform: translateX(0);
+  }
+  58% {
+    transform: translateX(calc(-100% - 3%));
+  }
+  78% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes page-enter-push-left {
+  0% {
+    transform: translateX(100%);
+  }
+  58% {
+    transform: translateX(3%);
+  }
+  78% {
+    transform: translateX(-1%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 /* 원형 열림과 같은 속도감 — 왼쪽 가장자리에서 오른쪽으로 닦아냄 (inset left ↓) */
 @keyframes page-reveal-wipe-right {
   0% {
@@ -216,9 +305,18 @@
     animation: page-fade-out 0.22s ease forwards;
   }
 
+  .page-transition__layer--exit-fade,
+  .page-transition__layer--exit-push-left,
+  .page-transition--score-wipe-push-left > .page-transition__layer {
+    animation: page-fade-out 0.22s ease forwards;
+  }
+
   .page-transition__layer--enter-forward,
   .page-transition__layer--enter-back,
+  .page-transition__layer--enter-fade,
+  .page-transition__layer--enter-push-left,
   .page-transition__layer--enter-cover-right,
+  .page-wipe-overlay__layer--enter-push-left,
   .page-transition__layer--enter-circle {
     clip-path: none;
     animation: page-fade-in 0.22s ease forwards;

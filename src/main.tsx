@@ -6,6 +6,7 @@ import './styles/page-header.css'
 import './styles/page-dialogue.css'
 import './styles/page-dialogue-reveal.css'
 import './styles/page-dialogue-popup.css'
+import './styles/page-intro-v2.css'
 import './styles/page-transition.css'
 
 createRoot(document.getElementById('root')!).render(

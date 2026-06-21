@@ -89,6 +89,42 @@
   z-index: -1;
 }
 
+/* Emma PNG 발밑 스포트라이트 — Leo는 CSS로 동일 연출 */
+.page-dialogue__character-halo--ground {
+  top: 78%;
+  width: 76%;
+  aspect-ratio: 2.4 / 1;
+  height: auto;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.88) 0%,
+    rgba(255, 255, 255, 0.52) 30%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 72%
+  );
+  filter: blur(4px);
+  box-shadow: 0 0 28px 10px rgba(255, 255, 255, 0.32);
+  z-index: 0;
+}
+
+/* 캐릭터 실루엣 바깥 흰색 도넛 링 */
+.page-dialogue__character-halo--ring {
+  top: 44%;
+  width: 92%;
+  background: radial-gradient(
+    circle,
+    transparent 0%,
+    transparent 30%,
+    rgba(255, 255, 255, 0.78) 38%,
+    rgba(255, 255, 255, 0.42) 46%,
+    rgba(255, 255, 255, 0.14) 54%,
+    transparent 66%
+  );
+  filter: blur(5px);
+  box-shadow: none;
+  z-index: 0;
+}
+
 .page-dialogue__character {
   position: relative;
   z-index: 1;
@@ -190,12 +226,18 @@
   opacity: 0;
 }
 
+/* Emma (ver2) — 힌트·리플레이 위치 */
+.page-dialogue--emma {
+  --hints-y: 3780;
+  --replay-y: 3580;
+}
+
 /* 제임스 — 리플레이 위치는 올리비아 조정 전 좌표 유지 */
 .page-dialogue--james {
   --replay-y: 2780;
 }
 
-/* 제임스 — 연한 푸른 할로 (은은하게) */
+/* 제임스 — 연한 푸른 할로 (음성 재생) */
 .page-dialogue--james .page-dialogue__character-halo {
   background: radial-gradient(
     circle,
@@ -220,6 +262,89 @@
   );
   filter: blur(16px);
   box-shadow: 0 0 80px 36px rgba(90, 175, 240, 0.2);
+}
+
+/* Emma (ver2) — 조금 더 진한 하늘색 할로 */
+.page-dialogue--emma .page-dialogue__character-halo {
+  background: radial-gradient(
+    circle,
+    rgba(125, 198, 255, 0.74) 0%,
+    rgba(95, 172, 250, 0.54) 24%,
+    rgba(75, 152, 245, 0.36) 42%,
+    rgba(60, 135, 235, 0.15) 56%,
+    transparent 70%
+  );
+  filter: blur(8px);
+  box-shadow:
+    0 0 36px 14px rgba(70, 158, 245, 0.42),
+    0 0 64px 24px rgba(55, 142, 235, 0.26);
+}
+
+.page-dialogue--emma .page-dialogue__character-halo--outer {
+  background: radial-gradient(
+    circle,
+    rgba(110, 182, 252, 0.38) 0%,
+    rgba(88, 165, 245, 0.2) 38%,
+    transparent 64%
+  );
+  filter: blur(16px);
+  box-shadow: 0 0 80px 36px rgba(65, 148, 238, 0.28);
+}
+
+/* Leo (ver2) — Emma와 동일 구조(흰 도넛 + 연두 톤) · 리플레이 위치 */
+.page-dialogue--leo {
+  --replay-x: 2260;
+}
+
+.page-dialogue--leo .page-dialogue__character-halo {
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.76) 0%,
+    rgba(240, 255, 215, 0.58) 20%,
+    rgba(205, 245, 145, 0.46) 38%,
+    rgba(175, 225, 105, 0.24) 52%,
+    transparent 70%
+  );
+  filter: blur(8px);
+  box-shadow:
+    0 0 36px 14px rgba(255, 255, 255, 0.36),
+    0 0 64px 24px rgba(150, 215, 80, 0.28);
+}
+
+.page-dialogue--leo .page-dialogue__character-halo--outer {
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.34) 0%,
+    rgba(220, 250, 165, 0.22) 38%,
+    transparent 64%
+  );
+  filter: blur(16px);
+  box-shadow: 0 0 80px 36px rgba(170, 225, 95, 0.26);
+}
+
+.page-dialogue--leo .page-dialogue__character-halo--ground {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(255, 255, 255, 0.58) 28%,
+    rgba(235, 255, 210, 0.24) 48%,
+    transparent 72%
+  );
+  box-shadow:
+    0 0 28px 10px rgba(255, 255, 255, 0.38),
+    0 0 48px 18px rgba(180, 230, 110, 0.18);
+}
+
+.page-dialogue--leo .page-dialogue__character-halo--ring {
+  background: radial-gradient(
+    circle,
+    transparent 0%,
+    transparent 30%,
+    rgba(255, 255, 255, 0.82) 38%,
+    rgba(255, 255, 255, 0.46) 46%,
+    rgba(220, 250, 170, 0.16) 54%,
+    transparent 66%
+  );
 }
 
 .page-dialogue--james .page-dialogue__mic-glow {

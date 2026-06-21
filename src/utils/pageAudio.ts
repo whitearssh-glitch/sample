@@ -105,11 +105,16 @@ export function resetScorePageIntroVoice(): void {
   scorePageIntroStarted = false
 }
 
-/** 닦기 오버레이: 전환 완료 직전 intro */
-export function scheduleScoreIntroVoiceNearWipeEnd(): number {
+/** 닦기 오버레이: 전환 완료 직전 intro (전환 길이에 비례해 리드 타임 조정) */
+export function scheduleScoreIntroVoiceNearWipeEnd(
+  transitionMs: number = PAGE_TRANSITION_COVER_MS,
+): number {
+  const leadMs = Math.round(
+    SCORE_INTRO_VOICE_LEAD_MS * (transitionMs / PAGE_TRANSITION_COVER_MS),
+  )
   return window.setTimeout(() => {
     playScorePageIntroVoice()
-  }, Math.max(0, PAGE_TRANSITION_COVER_MS - SCORE_INTRO_VOICE_LEAD_MS))
+  }, Math.max(0, transitionMs - leadMs))
 }
 
 export function stopIntroVoice(): void {

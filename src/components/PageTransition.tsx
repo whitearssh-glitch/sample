@@ -12,12 +12,14 @@ export const PAGE_TRANSITION_MS = 420
 export const PAGE_TRANSITION_CIRCLE_MS = 2100
 /** 제임스 인트로 → 대화 원형 전환 */
 export const PAGE_TRANSITION_CIRCLE_JAMES_MS = 1300
-export const PAGE_TRANSITION_COVER_MS = 2100
+export const PAGE_TRANSITION_COVER_MS = 1700
+export const PAGE_TRANSITION_FADE_MS = 1200
+export const PAGE_TRANSITION_PUSH_LEFT_MS = 640
 
 export type TransitionDirection = 'forward' | 'back'
-export type TransitionMode = 'slide' | 'circle' | 'cover-right'
+export type TransitionMode = 'slide' | 'circle' | 'cover-right' | 'fade' | 'push-left'
 
-const CIRCLE_LANDING_PAGES: PageId[] = ['dialogue', 'hint']
+const CIRCLE_LANDING_PAGES: PageId[] = ['dialogue', 'hint', 'dialogue-v2', 'hint-v2']
 
 type PageTransitionProps = {
   page: PageId
@@ -26,6 +28,7 @@ type PageTransitionProps = {
   mode: TransitionMode | null
   children: ReactNode
   exitingChildren: ReactNode | null
+  className?: string
   onTransitionEnd?: () => void
 }
 
@@ -36,19 +39,26 @@ export function PageTransition({
   mode,
   children,
   exitingChildren,
+  className,
   onTransitionEnd,
 }: PageTransitionProps) {
   const [showExit, setShowExit] = useState(Boolean(exitingPage))
   const [circleRevealed, setCircleRevealed] = useState(false)
   const finishedRef = useRef(false)
   const isJamesCircle =
-    mode === 'circle' && exitingPage === 'score' && page === 'hint'
+    mode === 'circle' &&
+    ((exitingPage === 'score' && page === 'hint') ||
+      (exitingPage === 'score-v2' && page === 'hint-v2'))
 
   const durationMs = isJamesCircle
     ? PAGE_TRANSITION_CIRCLE_JAMES_MS
     : mode === 'circle' || mode === 'cover-right'
       ? PAGE_TRANSITION_COVER_MS
-      : PAGE_TRANSITION_MS
+      : mode === 'fade'
+        ? PAGE_TRANSITION_FADE_MS
+        : mode === 'push-left'
+          ? PAGE_TRANSITION_PUSH_LEFT_MS
+          : PAGE_TRANSITION_MS
 
   const finishTransition = useCallback(() => {
     if (finishedRef.current) return
@@ -87,10 +97,17 @@ export function PageTransition({
     const isSlideDone =
       mode === 'slide' &&
       (name.includes('page-enter-forward') || name.includes('page-enter-back'))
+    const isFadeDone =
+      mode === 'fade' &&
+      (name === 'page-enter-fade' || name === 'page-fade-in')
+    const isPushLeftDone =
+      mode === 'push-left' &&
+      (name === 'page-enter-push-left' || name === 'page-fade-in')
     const isCoverRightDone =
       mode === 'cover-right' &&
       (name === 'page-reveal-wipe-right' || name === 'page-fade-in')
-    if (!isCircleDone && !isSlideDone && !isCoverRightDone) return
+    if (!isCircleDone && !isSlideDone && !isCoverRightDone && !isFadeDone && !isPushLeftDone)
+      return
 
     finishTransition()
   }
@@ -108,13 +125,22 @@ export function PageTransition({
   } else if (mode === 'cover-right') {
     exitClass = 'page-transition__layer--exit-under-cover'
     enterClass = 'page-transition__layer--enter-cover-right'
+  } else if (mode === 'fade') {
+    exitClass = 'page-transition__layer--exit-fade'
+    enterClass = 'page-transition__layer--enter-fade'
+  } else if (mode === 'push-left') {
+    exitClass = 'page-transition__layer--exit-push-left'
+    enterClass = 'page-transition__layer--enter-push-left'
   } else if (direction === 'back') {
     exitClass = 'page-transition__layer--exit-back'
     enterClass = 'page-transition__layer--enter-back'
   }
 
   return (
-    <div className="page-transition" aria-live="polite">
+    <div
+      className={['page-transition', className].filter(Boolean).join(' ')}
+      aria-live="polite"
+    >
       {showExit && exitingPage && exitingChildren && direction && (
         <div
           key={`exit-${exitingPage}`}

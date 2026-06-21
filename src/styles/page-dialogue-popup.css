@@ -39,6 +39,8 @@
 
 /* Good·리본·Next 묶음 — 화면 정중앙 (Good transform 상향 보정 포함) */
 .dialogue-popup__cluster {
+  --star-aspect: 0.95105;
+  --star-scale: 1.02;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,12 +77,124 @@
   }
 }
 
+.dialogue-popup__title-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.dialogue-popup__title-wrap .dialogue-popup__title {
+  position: relative;
+  z-index: 2;
+}
+
+.dialogue-popup__firework {
+  position: absolute;
+  height: auto;
+  pointer-events: none;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  will-change: opacity, filter, transform;
+  opacity: 0;
+}
+
+.dialogue-popup--settled .dialogue-popup__firework {
+  opacity: 0.95;
+}
+
+@keyframes dialogue-popup-firework-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.22);
+    filter: brightness(1.55);
+  }
+  to {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.dialogue-popup__firework--glow-warm {
+  animation:
+    dialogue-popup-firework-in 0.55s cubic-bezier(0.12, 0.95, 0.18, 1) both,
+    dialogue-popup-firework-glow-warm 2.6s ease-in-out 0.55s infinite;
+}
+
+.dialogue-popup__firework--glow-cool {
+  animation:
+    dialogue-popup-firework-in 0.55s cubic-bezier(0.12, 0.95, 0.18, 1) both,
+    dialogue-popup-firework-glow-cool 2.6s ease-in-out 0.55s infinite;
+}
+
+.dialogue-popup__firework--glow-white {
+  animation:
+    dialogue-popup-firework-in 0.55s cubic-bezier(0.12, 0.95, 0.18, 1) both,
+    dialogue-popup-firework-glow-white 2.6s ease-in-out 0.55s infinite;
+}
+
+@keyframes dialogue-popup-firework-glow-warm {
+  0%,
+  100% {
+    opacity: 0.74;
+    transform: translate(-50%, -50%) scale(0.86);
+    filter: drop-shadow(0 0 10px rgba(255, 120, 180, 0.62))
+      drop-shadow(0 0 18px rgba(255, 210, 80, 0.48))
+      drop-shadow(0 0 28px rgba(255, 160, 100, 0.28));
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.18);
+    filter: drop-shadow(0 0 18px rgba(255, 130, 190, 0.92))
+      drop-shadow(0 0 32px rgba(255, 220, 90, 0.72))
+      drop-shadow(0 0 48px rgba(255, 150, 110, 0.45));
+  }
+}
+
+@keyframes dialogue-popup-firework-glow-cool {
+  0%,
+  100% {
+    opacity: 0.74;
+    transform: translate(-50%, -50%) scale(0.86);
+    filter: drop-shadow(0 0 10px rgba(120, 200, 255, 0.62))
+      drop-shadow(0 0 18px rgba(255, 120, 190, 0.42))
+      drop-shadow(0 0 28px rgba(140, 180, 255, 0.28));
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.18);
+    filter: drop-shadow(0 0 18px rgba(140, 215, 255, 0.88))
+      drop-shadow(0 0 30px rgba(255, 130, 200, 0.65))
+      drop-shadow(0 0 44px rgba(120, 190, 255, 0.42));
+  }
+}
+
+@keyframes dialogue-popup-firework-glow-white {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: translate(-50%, -50%) scale(0.84);
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.72))
+      drop-shadow(0 0 16px rgba(255, 255, 255, 0.42))
+      drop-shadow(0 0 26px rgba(255, 245, 220, 0.22));
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.16);
+    filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.98))
+      drop-shadow(0 0 28px rgba(255, 255, 255, 0.62))
+      drop-shadow(0 0 40px rgba(255, 250, 230, 0.38));
+  }
+}
+
 /* 리본 + 별: 동일 비율 박스 (좌표는 dialoguePopupLayout.ts) */
 .dialogue-popup__stars {
   --ribbon-w: 2385;
   --ribbon-h: 740;
-  --star-aspect: 0.95105;
-  --star-scale: 1.02;
   position: relative;
   width: calc(2800 / var(--design-w) * min(100vw, 375px) * var(--popup-scale));
   max-width: 78%;
@@ -247,6 +361,56 @@
 .dialogue-popup__next.pressable--no-hover:active {
   filter: none;
   transform: none;
+}
+
+/* Emma (ver2) — Good / Next만 축소 */
+.dialogue-popup--emma .dialogue-popup__title {
+  width: calc(
+    2410 / var(--design-w) * min(100vw, 375px) * var(--popup-scale) * 0.8
+  );
+  max-width: 58%;
+}
+
+.dialogue-popup--emma .dialogue-popup__next {
+  width: calc(
+    1540 / var(--design-w) * min(100vw, 375px) * var(--popup-scale) * 0.8
+  );
+  max-width: 42%;
+}
+
+/* Leo (ver2) Super / Next — Emma와 동일 크기 */
+.dialogue-popup--james.dialogue-popup--leo {
+  --popup-scale: 0.82;
+  --leo-title-h: calc(
+    386 / 1239 * 2410 / var(--design-w) * min(100vw, 375px) * var(--popup-scale) *
+      0.8
+  );
+}
+
+.dialogue-popup--james.dialogue-popup--leo .dialogue-popup__title-wrap {
+  min-height: calc(var(--leo-title-h) * 2.35);
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.dialogue-popup--james.dialogue-popup--leo .dialogue-popup__title {
+  width: calc(
+    2410 / var(--design-w) * min(100vw, 375px) * var(--popup-scale) * 0.8
+  );
+  max-width: 58%;
+  animation: dialogue-popup-title-fly-stamp 0.64s cubic-bezier(0.1, 0.95, 0.15, 1)
+    var(--title-stamp-delay, 60ms) both;
+}
+
+.dialogue-popup--james.dialogue-popup--leo .dialogue-popup__next {
+  width: calc(
+    1540 / var(--design-w) * min(100vw, 375px) * var(--popup-scale) * 0.8
+  );
+  max-width: 42%;
+}
+
+.dialogue-popup--settled.dialogue-popup--james.dialogue-popup--leo .dialogue-popup__title {
+  transform: scale(1) translateY(var(--title-lift)) rotate(0deg);
 }
 
 /* 제임스 — 배경 이미지는 반투명, 뒤 대화 화면이 비치도록 */
@@ -496,6 +660,29 @@
     transform: translateX(-50%) scale(1);
   }
 
+  .dialogue-popup__firework {
+    opacity: 0.92;
+    animation: none !important;
+  }
+
+  .dialogue-popup__firework--glow-warm {
+    filter: drop-shadow(0 0 16px rgba(255, 130, 190, 0.82))
+      drop-shadow(0 0 28px rgba(255, 220, 90, 0.58))
+      drop-shadow(0 0 40px rgba(255, 150, 110, 0.35));
+  }
+
+  .dialogue-popup__firework--glow-cool {
+    filter: drop-shadow(0 0 16px rgba(140, 215, 255, 0.82))
+      drop-shadow(0 0 26px rgba(255, 130, 200, 0.58))
+      drop-shadow(0 0 38px rgba(120, 190, 255, 0.35));
+  }
+
+  .dialogue-popup__firework--glow-white {
+    filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.95))
+      drop-shadow(0 0 24px rgba(255, 255, 255, 0.55))
+      drop-shadow(0 0 36px rgba(255, 250, 230, 0.32));
+  }
+
   .dialogue-popup__star--stamp-1,
   .dialogue-popup__star--stamp-2,
   .dialogue-popup__star--stamp-3 {
@@ -506,5 +693,9 @@
 
   .dialogue-popup--james .dialogue-popup__title {
     transform: scale(1.12) translateY(var(--title-lift));
+  }
+
+  .dialogue-popup--james.dialogue-popup--leo .dialogue-popup__title {
+    transform: scale(1) translateY(var(--title-lift));
   }
 }

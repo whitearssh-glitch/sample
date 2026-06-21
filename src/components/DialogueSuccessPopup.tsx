@@ -2,12 +2,16 @@ import { useEffect } from 'react'
 import { Pressable } from './Pressable'
 import {
   DIALOGUE_POPUP_RIBBON,
+  EMMA_DIALOGUE_POPUP_RIBBON,
   DIALOGUE_POPUP_ENTRANCE,
 } from '../config/dialoguePopupLayout'
 import {
   JAMES_DIALOGUE_POPUP_RIBBON,
+  LEO_DIALOGUE_POPUP_RIBBON,
   JAMES_DIALOGUE_POPUP_ENTRANCE,
 } from '../config/jamesDialoguePopupLayout'
+import { LEO_SUPER_FIREWORKS } from '../config/leoDialoguePopupLayout'
+import type { AppTrack } from '../types/pages'
 import {
   hasDialoguePopupEntrancePlayed,
   markDialoguePopupEntrancePlayed,
@@ -19,11 +23,21 @@ import {
   playOpen2Sfx,
 } from '../utils/pageAudio'
 
+const V2 = '/assets/ver2/sources'
+
 const OLIVIA_ASSETS = {
   title: '/assets/score-good.png',
   ribbon: '/assets/score-ribbon.png',
   star: '/assets/score-star.png',
   next: '/assets/button-next.png',
+} as const
+
+const EMMA_ASSETS = {
+  ...OLIVIA_ASSETS,
+  title: `${V2}/score-good.png`,
+  ribbon: `${V2}/score-ribbon.png`,
+  star: `${V2}/score-star.png`,
+  next: `${V2}/button-next.png`,
 } as const
 
 const JAMES_ASSETS = {
@@ -35,24 +49,47 @@ const JAMES_ASSETS = {
   next: '/assets/button-next.png',
 } as const
 
+const LEO_ASSETS = {
+  ...JAMES_ASSETS,
+  title: `${V2}/score-super.png`,
+  ribbon: `${V2}/score-ribbon.png`,
+  star: `${V2}/score-star.png`,
+  next: `${V2}/button-next.png`,
+} as const
+
 type DialogueSuccessPopupProps = {
   variant?: DialoguePopupKind
+  track?: AppTrack
   onNext: () => void
 }
 
 export function DialogueSuccessPopup({
   variant = 'olivia',
+  track = 'ver1',
   onNext,
 }: DialogueSuccessPopupProps) {
   const isJames = variant === 'james'
-  const ribbon = isJames ? JAMES_DIALOGUE_POPUP_RIBBON : DIALOGUE_POPUP_RIBBON
+  const isLeo = isJames && track === 'ver2'
+  const ribbon = isJames
+    ? track === 'ver2'
+      ? LEO_DIALOGUE_POPUP_RIBBON
+      : JAMES_DIALOGUE_POPUP_RIBBON
+    : track === 'ver2'
+      ? EMMA_DIALOGUE_POPUP_RIBBON
+      : DIALOGUE_POPUP_RIBBON
   const entrance = isJames ? JAMES_DIALOGUE_POPUP_ENTRANCE : DIALOGUE_POPUP_ENTRANCE
-  const assets = isJames ? JAMES_ASSETS : OLIVIA_ASSETS
-  const skipEntrance = hasDialoguePopupEntrancePlayed(variant)
+  const assets = isJames
+    ? track === 'ver2'
+      ? LEO_ASSETS
+      : JAMES_ASSETS
+    : track === 'ver2'
+      ? EMMA_ASSETS
+      : OLIVIA_ASSETS
+  const skipEntrance = hasDialoguePopupEntrancePlayed(variant, track)
 
   useEffect(() => {
-    markDialoguePopupEntrancePlayed(variant)
-  }, [variant])
+    markDialoguePopupEntrancePlayed(variant, track)
+  }, [track, variant])
 
   useEffect(() => {
     if (skipEntrance) return
@@ -87,6 +124,8 @@ export function DialogueSuccessPopup({
   const popupClass = [
     'dialogue-popup',
     isJames ? 'dialogue-popup--james' : '',
+    !isJames && track === 'ver2' ? 'dialogue-popup--emma' : '',
+    isJames && track === 'ver2' ? 'dialogue-popup--leo' : '',
     skipEntrance ? 'dialogue-popup--settled' : '',
   ]
     .filter(Boolean)
@@ -115,7 +154,7 @@ export function DialogueSuccessPopup({
 
       <div className="dialogue-popup__backdrop" aria-hidden />
 
-      {isJames && (
+      {isJames && !isLeo && (
         <img
           className="dialogue-popup__confetti"
           src={JAMES_ASSETS.confetti}
@@ -126,12 +165,30 @@ export function DialogueSuccessPopup({
 
       <div className="dialogue-popup__content">
         <div className="dialogue-popup__cluster" style={ribbonStyle}>
-          <img
-            id="dialogue-popup-title"
-            className="dialogue-popup__title"
-            src={assets.title}
-            alt={isJames ? 'Super!' : 'Good!'}
-          />
+          <div className="dialogue-popup__title-wrap">
+            {isLeo &&
+              LEO_SUPER_FIREWORKS.map((firework) => (
+                <img
+                  key={firework.id}
+                  className={`dialogue-popup__firework dialogue-popup__firework--${firework.id} dialogue-popup__firework--glow-${firework.glow}`}
+                  src={firework.src}
+                  alt=""
+                  aria-hidden
+                  style={{
+                    left: firework.left,
+                    top: firework.top,
+                    width: `calc(${firework.assetW} / 3333 * min(100vw, 375px) * ${firework.scale})`,
+                    animationDelay: `${firework.delayMs}ms`,
+                  }}
+                />
+              ))}
+            <img
+              id="dialogue-popup-title"
+              className="dialogue-popup__title"
+              src={assets.title}
+              alt={isJames ? 'Super!' : 'Good!'}
+            />
+          </div>
 
           <div className="dialogue-popup__stars">
             <img

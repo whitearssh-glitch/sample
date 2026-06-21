@@ -7,17 +7,24 @@ type PlaceholderPageProps = {
   onBack: () => void
 }
 
-const PAGE_LABELS: Record<Exclude<PageId, 'intro'>, string> = {
+const PAGE_LABELS: Record<Exclude<PageId, 'intro' | 'intro-v2' | 'main'>, string> = {
   dialogue: '2. 대화 화면',
   score: '4. 제임스 인트로',
   hint: '5. 제임스 대화',
   popup: '6. 팝업',
   complete: '7. 완료 화면',
+  'dialogue-v2': 'ver2 · 2. 대화 화면',
+  'score-v2': 'ver2 · 4. 제임스 인트로',
+  'hint-v2': 'ver2 · 5. 제임스 대화',
+  'popup-v2': 'ver2 · 6. 팝업',
+  'complete-v2': 'ver2 · 7. 완료 화면',
 }
 
 export function PlaceholderPage({ pageId, onBack }: PlaceholderPageProps) {
   const label =
-    pageId === 'intro' ? '시작 화면' : PAGE_LABELS[pageId]
+    pageId === 'intro' || pageId === 'intro-v2' || pageId === 'main'
+      ? '시작 화면'
+      : PAGE_LABELS[pageId]
 
   return (
     <MobileShell>
