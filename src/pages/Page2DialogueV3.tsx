@@ -209,8 +209,8 @@ export function Page2DialogueV3({
             aria-hidden={!showControlsUi}
           >
             <Pressable
-              variant="icon"
-              className="page-dialogue__replay pressable--no-hover"
+              variant="cta"
+              className="page-dialogue__replay"
               aria-label="다시 듣기"
               tabIndex={showControlsUi ? 0 : -1}
               disabled={haloBusy || popupOpen}
@@ -258,7 +258,7 @@ export function Page2DialogueV3({
                 )}
                 <Pressable
                   variant="cta"
-                  className="page-dialogue__mic pressable--no-hover"
+                  className="page-dialogue__mic"
                   aria-label={isMicListening ? '말하기 멈추기' : '말하기'}
                   aria-pressed={isMicListening}
                   disabled={!showControlsUi || isVoiceActive}

@@ -157,6 +157,14 @@
   height: auto;
 }
 
+.page-dialogue__replay.pressable--cta:hover {
+  transform: translate(-50%, -50%) scale(1.03);
+}
+
+.page-dialogue__replay.pressable--cta:active {
+  transform: translate(-50%, -50%) scale(0.97);
+}
+
 .page-dialogue__replay.pressable--no-hover:hover,
 .page-dialogue__replay.pressable--no-hover:active {
   filter: none;
@@ -375,6 +383,14 @@
 .page-dialogue__mic img {
   width: 100%;
   height: auto;
+}
+
+.page-dialogue__mic.pressable--cta:hover {
+  transform: scale(1.03);
+}
+
+.page-dialogue__mic.pressable--cta:active {
+  transform: scale(0.97);
 }
 
 .page-dialogue__mic.pressable--no-hover:hover,

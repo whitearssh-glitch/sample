@@ -240,7 +240,7 @@ export function DialogueSuccessPopup({
 
           <Pressable
             variant="cta"
-            className="dialogue-popup__next pressable--no-hover"
+            className={`dialogue-popup__next${track === 'ver1' ? ' pressable--no-hover' : ''}`}
             aria-label="다음"
             onClick={handleNext}
           >

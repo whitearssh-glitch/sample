@@ -183,7 +183,7 @@ export function Page1IntroV3({ onStart, onClose, isTransitioning }: Page1IntroV3
                   ) : (
                     <Pressable
                       variant="cta"
-                      className="intro-v2-character__start pressable--no-hover"
+                      className="intro-v2-character__start"
                       aria-label="시작하기"
                       disabled={isTransitioning}
                       onClick={handleStart}

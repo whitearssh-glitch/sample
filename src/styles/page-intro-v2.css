@@ -294,10 +294,12 @@
   height: auto;
 }
 
-.intro-v2-character__start.pressable--no-hover:hover,
-.intro-v2-character__start.pressable--no-hover:active {
-  transform: translateY(-50%);
-  filter: none;
+.intro-v2-character__start.pressable--cta:hover {
+  transform: translateY(-50%) scale(1.03);
+}
+
+.intro-v2-character__start.pressable--cta:active {
+  transform: translateY(-50%) scale(0.97);
 }
 
 .intro-v2-character__lock {

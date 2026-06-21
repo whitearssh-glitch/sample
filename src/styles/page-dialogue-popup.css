@@ -357,6 +357,14 @@
   display: block;
 }
 
+.dialogue-popup__next.pressable--cta:hover {
+  transform: scale(1.03);
+}
+
+.dialogue-popup__next.pressable--cta:active {
+  transform: scale(0.97);
+}
+
 .dialogue-popup__next.pressable--no-hover:hover,
 .dialogue-popup__next.pressable--no-hover:active {
   filter: none;

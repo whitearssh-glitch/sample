@@ -153,7 +153,7 @@ export function Page4IntroV2({
                 {character.state === 'active' && (
                   <Pressable
                     variant="cta"
-                    className="intro-v2-character__start pressable--no-hover"
+                    className="intro-v2-character__start"
                     aria-label="시작하기"
                     disabled={isTransitioning}
                     onClick={handleGo}
