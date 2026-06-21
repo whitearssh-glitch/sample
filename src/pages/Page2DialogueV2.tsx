@@ -18,11 +18,11 @@ const V2 = '/assets/ver2/sources'
 const ASSETS = {
   background: `${V2}/background-dialogue-emma.png`,
   character: `${V2}/character-emma.png`,
-  replay: '/assets/button-replay.png',
+  replay: `${V2}/button-replay.png`,
   hintBulb: '/assets/hint-bulb.png',
   hint01: '/assets/hint-01.png',
   hint02: '/assets/hint-02.png',
-  microphone: '/assets/button-microphone.png',
+  microphone: `${V2}/button-microphone.png`,
 } as const
 
 type Page2DialogueV2Props = {

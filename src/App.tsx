@@ -53,12 +53,18 @@ const JAMES_DIALOGUE_PRELOAD = [
   JAMES_DIALOGUE_VOICE.responseVoiceSrc,
 ] as const
 
+const V2 = '/assets/ver2/sources'
+
 const DIALOGUE_V2_PRELOAD = [
+  `${V2}/button-replay.png`,
+  `${V2}/button-microphone.png`,
   EMMA_DIALOGUE_VOICE.voiceSrc,
   EMMA_DIALOGUE_VOICE.responseVoiceSrc,
 ] as const
 
 const LEO_DIALOGUE_PRELOAD = [
+  `${V2}/button-replay.png`,
+  `${V2}/button-microphone.png`,
   LEO_DIALOGUE_VOICE.voiceSrc,
   LEO_DIALOGUE_VOICE.responseVoiceSrc,
 ] as const

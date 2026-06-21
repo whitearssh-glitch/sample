@@ -16,8 +16,8 @@ const V2 = '/assets/ver2/sources'
 const ASSETS = {
   background: `${V2}/background-dialogue-leo.png`,
   character: `${V2}/character-leo.png`,
-  replay: '/assets/button-replay.png',
-  microphone: '/assets/button-microphone.png',
+  replay: `${V2}/button-replay.png`,
+  microphone: `${V2}/button-microphone.png`,
 } as const
 
 type Page5JamesDialogueV2Props = {
