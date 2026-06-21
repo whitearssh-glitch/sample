@@ -9,12 +9,16 @@ import { PageWipeOverlay } from './components/PageWipeOverlay'
 import { PageMain } from './pages/PageMain'
 import { Page1Intro } from './pages/Page1Intro'
 import { Page1IntroV2 } from './pages/Page1IntroV2'
+import { Page1IntroV3 } from './pages/Page1IntroV3'
 import { Page2Dialogue } from './pages/Page2Dialogue'
 import { Page2DialogueV2 } from './pages/Page2DialogueV2'
+import { Page2DialogueV3 } from './pages/Page2DialogueV3'
 import { Page4Intro } from './pages/Page4Intro'
 import { Page4IntroV2 } from './pages/Page4IntroV2'
+import { Page4IntroV3 } from './pages/Page4IntroV3'
 import { Page5JamesDialogue } from './pages/Page5JamesDialogue'
 import { Page5JamesDialogueV2 } from './pages/Page5JamesDialogueV2'
+import { Page5JamesDialogueV3 } from './pages/Page5JamesDialogueV3'
 import { PlaceholderPage } from './pages/PlaceholderPage'
 import { getDevInitialPage } from './config/devPreview'
 import {
@@ -54,6 +58,7 @@ const JAMES_DIALOGUE_PRELOAD = [
 ] as const
 
 const V2 = '/assets/ver2/sources'
+const V3 = '/assets/ver3/sources'
 
 const DIALOGUE_V2_PRELOAD = [
   `${V2}/button-replay.png`,
@@ -62,9 +67,26 @@ const DIALOGUE_V2_PRELOAD = [
   EMMA_DIALOGUE_VOICE.responseVoiceSrc,
 ] as const
 
+const DIALOGUE_V3_PRELOAD = [
+  `${V3}/button-replay.png`,
+  `${V3}/button-microphone.png`,
+  `${V3}/character-emma.webm`,
+  `${V3}/character-emma.mp4`,
+  EMMA_DIALOGUE_VOICE.voiceSrc,
+  EMMA_DIALOGUE_VOICE.responseVoiceSrc,
+] as const
+
 const LEO_DIALOGUE_PRELOAD = [
   `${V2}/button-replay.png`,
   `${V2}/button-microphone.png`,
+  LEO_DIALOGUE_VOICE.voiceSrc,
+  LEO_DIALOGUE_VOICE.responseVoiceSrc,
+] as const
+
+const LEO_DIALOGUE_V3_PRELOAD = [
+  `${V3}/button-replay.png`,
+  `${V3}/button-microphone.png`,
+  `${V3}/character-leo.webm`,
   LEO_DIALOGUE_VOICE.voiceSrc,
   LEO_DIALOGUE_VOICE.responseVoiceSrc,
 ] as const
@@ -100,7 +122,7 @@ const JAMES_POPUP_PRELOAD = [
   '/fb1.mp3',
 ] as const
 
-type ScoreWipeTarget = 'score' | 'score-v2'
+type ScoreWipeTarget = 'score' | 'score-v2' | 'score-v3'
 
 function App() {
   const [page, setPage] = useState<PageId>(() => {
@@ -126,9 +148,11 @@ function App() {
       ...INTRO_PRELOAD,
       ...DIALOGUE_PRELOAD,
       ...DIALOGUE_V2_PRELOAD,
+      ...DIALOGUE_V3_PRELOAD,
       ...JAMES_INTRO_PRELOAD,
       ...JAMES_DIALOGUE_PRELOAD,
       ...LEO_DIALOGUE_PRELOAD,
+      ...LEO_DIALOGUE_V3_PRELOAD,
       ...JAMES_POPUP_PRELOAD,
     ].forEach((src) => {
       if (/\.(mp3|wav|ogg|m4a)$/i.test(src)) {
@@ -137,17 +161,24 @@ function App() {
         audio.load()
         return
       }
+      if (/\.(mp4|webm)$/i.test(src)) {
+        const video = document.createElement('video')
+        video.preload = 'auto'
+        video.src = src
+        video.load()
+        return
+      }
       const img = new Image()
       img.src = src
     })
   }, [])
 
   useEffect(() => {
-    if ((page === 'intro' || page === 'intro-v2') && !isTransitioning) {
+    if ((page === 'intro' || page === 'intro-v2' || page === 'intro-v3') && !isTransitioning) {
       playIntroVoice()
       return
     }
-    if (page !== 'score' && page !== 'score-v2') {
+    if (page !== 'score' && page !== 'score-v2' && page !== 'score-v3') {
       stopIntroVoice()
     }
   }, [page, isTransitioning])
@@ -175,12 +206,16 @@ function App() {
     page === 'dialogue' ||
     exitingPage === 'dialogue' ||
     page === 'dialogue-v2' ||
-    exitingPage === 'dialogue-v2'
+    exitingPage === 'dialogue-v2' ||
+    page === 'dialogue-v3' ||
+    exitingPage === 'dialogue-v3'
   const jamesDialogueOnScreen =
     page === 'hint' ||
     exitingPage === 'hint' ||
     page === 'hint-v2' ||
-    exitingPage === 'hint-v2'
+    exitingPage === 'hint-v2' ||
+    page === 'hint-v3' ||
+    exitingPage === 'hint-v3'
 
   const getTransitionMode = (
     from: PageId,
@@ -190,20 +225,23 @@ function App() {
     if (dir === 'forward' && from === 'main' && to === 'intro-v2') {
       return 'push-left'
     }
+    if (dir === 'forward' && from === 'main' && to === 'intro-v3') {
+      return 'push-left'
+    }
     if (dir === 'forward' && from === 'main' && to === 'intro') {
       return 'fade'
     }
     if (
       dir === 'forward' &&
-      (from === 'intro' || from === 'intro-v2') &&
-      (to === 'dialogue' || to === 'dialogue-v2')
+      (from === 'intro' || from === 'intro-v2' || from === 'intro-v3') &&
+      (to === 'dialogue' || to === 'dialogue-v2' || to === 'dialogue-v3')
     ) {
       return 'circle'
     }
     if (
       dir === 'forward' &&
-      (from === 'score' || from === 'score-v2') &&
-      (to === 'hint' || to === 'hint-v2')
+      (from === 'score' || from === 'score-v2' || from === 'score-v3') &&
+      (to === 'hint' || to === 'hint-v2' || to === 'hint-v3')
     ) {
       return 'circle'
     }
@@ -214,10 +252,10 @@ function App() {
     (next: PageId, dir: TransitionDirection) => {
       if (isTransitioning || next === page) return
       const track = trackForPage(next)
-      if (next === 'dialogue' || next === 'dialogue-v2') {
+      if (next === 'dialogue' || next === 'dialogue-v2' || next === 'dialogue-v3') {
         resetDialoguePopupSession('olivia', track)
       }
-      if (next === 'hint' || next === 'hint-v2') {
+      if (next === 'hint' || next === 'hint-v2' || next === 'hint-v3') {
         resetDialoguePopupSession('james', track)
       }
       const transitionMode = getTransitionMode(page, next, dir)
@@ -254,11 +292,23 @@ function App() {
       setScoreWipeTarget('score-v2')
       setIsTransitioning(true)
       setScoreWipeActive(true)
+      return
+    }
+    if (page === 'dialogue-v3') {
+      resetScorePageIntroVoice()
+      setScoreWipeTarget('score-v3')
+      setIsTransitioning(true)
+      setScoreWipeActive(true)
     }
   }, [isTransitioning, page, scoreWipeActive])
 
   const finishScoreWipe = useCallback(() => {
-    const track = scoreWipeTarget === 'score-v2' ? 'ver2' : 'ver1'
+    const track =
+      scoreWipeTarget === 'score-v2'
+        ? 'ver2'
+        : scoreWipeTarget === 'score-v3'
+          ? 'ver3'
+          : 'ver1'
     setScoreWipeActive(false)
     setIsTransitioning(false)
     clearDialogueExitSnapshot(track)
@@ -275,7 +325,7 @@ function App() {
     }
   }, [navigate, page])
 
-  const goToFlowHome = useCallback((home: 'intro' | 'intro-v2') => {
+  const goToFlowHome = useCallback((home: 'intro' | 'intro-v2' | 'intro-v3') => {
     setScoreWipeActive(false)
     setExitingPage(null)
     setDirection(null)
@@ -296,6 +346,7 @@ function App() {
     setIsTransitioning(false)
     clearDialogueExitSnapshot('ver1')
     clearDialogueExitSnapshot('ver2')
+    clearDialogueExitSnapshot('ver3')
     resetDialoguePopupSession()
     resetScorePageIntroVoice()
     stopIntroVoice()
@@ -309,6 +360,7 @@ function App() {
           <PageMain
             onStartVer1={() => navigate('intro', 'forward')}
             onStartVer2={() => navigate('intro-v2', 'forward')}
+            onStartVer3={() => navigate('intro-v3', 'forward')}
             isTransitioning={isTransitioning}
           />
         )
@@ -328,6 +380,14 @@ function App() {
             isTransitioning={isTransitioning}
           />
         )
+      case 'intro-v3':
+        return (
+          <Page1IntroV3
+            onStart={goNext}
+            onClose={() => goToFlowHome('intro-v3')}
+            isTransitioning={isTransitioning}
+          />
+        )
       case 'dialogue':
         return (
           <Page2Dialogue
@@ -341,6 +401,15 @@ function App() {
         return (
           <Page2DialogueV2
             onClose={() => goToFlowHome('intro-v2')}
+            onNext={beginScoreWipe}
+            active={dialogueOnScreen}
+            transitionComplete={dialogueOnScreen && !isTransitioning}
+          />
+        )
+      case 'dialogue-v3':
+        return (
+          <Page2DialogueV3
+            onClose={() => goToFlowHome('intro-v3')}
             onNext={beginScoreWipe}
             active={dialogueOnScreen}
             transitionComplete={dialogueOnScreen && !isTransitioning}
@@ -363,6 +432,14 @@ function App() {
             isTransitioning={isTransitioning}
           />
         )
+      case 'score-v3':
+        return (
+          <Page4IntroV3
+            onGo={goNext}
+            onClose={() => goToFlowHome('intro-v3')}
+            isTransitioning={isTransitioning}
+          />
+        )
       case 'hint':
         return (
           <Page5JamesDialogue
@@ -381,6 +458,15 @@ function App() {
             transitionComplete={jamesDialogueOnScreen && !isTransitioning}
           />
         )
+      case 'hint-v3':
+        return (
+          <Page5JamesDialogueV3
+            onClose={() => goToFlowHome('intro-v3')}
+            onNext={goToMain}
+            active={jamesDialogueOnScreen}
+            transitionComplete={jamesDialogueOnScreen && !isTransitioning}
+          />
+        )
       default:
         return <PlaceholderPage pageId={id} onBack={goBack} />
     }
@@ -394,7 +480,8 @@ function App() {
         direction={direction}
         mode={mode}
         className={
-          scoreWipeActive && scoreWipeTarget === 'score-v2'
+          scoreWipeActive &&
+          (scoreWipeTarget === 'score-v2' || scoreWipeTarget === 'score-v3')
             ? 'page-transition--score-wipe-push-left'
             : undefined
         }
@@ -423,6 +510,18 @@ function App() {
             scoreWipeDurationMs={PAGE_TRANSITION_PUSH_LEFT_MS}
             onGo={goNext}
             onClose={() => goToFlowHome('intro-v2')}
+            isTransitioning={isTransitioning}
+          />
+        </PageWipeOverlay>
+      )}
+      {scoreWipeActive && scoreWipeTarget === 'score-v3' && (
+        <PageWipeOverlay mode="push-left" onComplete={finishScoreWipe}>
+          <Page4IntroV3
+            embedded
+            deferBoxEnter
+            scoreWipeDurationMs={PAGE_TRANSITION_PUSH_LEFT_MS}
+            onGo={goNext}
+            onClose={() => goToFlowHome('intro-v3')}
             isTransitioning={isTransitioning}
           />
         </PageWipeOverlay>

@@ -4,12 +4,14 @@ import { Pressable } from '../components/Pressable'
 type PageMainProps = {
   onStartVer1: () => void
   onStartVer2: () => void
+  onStartVer3: () => void
   isTransitioning?: boolean
 }
 
 export function PageMain({
   onStartVer1,
   onStartVer2,
+  onStartVer3,
   isTransitioning,
 }: PageMainProps) {
   return (
@@ -31,6 +33,14 @@ export function PageMain({
             disabled={isTransitioning}
           >
             ver 2
+          </Pressable>
+          <Pressable
+            variant="cta"
+            className="page-main__button page-main__button--tertiary"
+            onClick={onStartVer3}
+            disabled={isTransitioning}
+          >
+            ver 3
           </Pressable>
         </div>
       </section>

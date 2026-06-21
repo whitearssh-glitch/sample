@@ -19,7 +19,14 @@ export const PAGE_TRANSITION_PUSH_LEFT_MS = 640
 export type TransitionDirection = 'forward' | 'back'
 export type TransitionMode = 'slide' | 'circle' | 'cover-right' | 'fade' | 'push-left'
 
-const CIRCLE_LANDING_PAGES: PageId[] = ['dialogue', 'hint', 'dialogue-v2', 'hint-v2']
+const CIRCLE_LANDING_PAGES: PageId[] = [
+  'dialogue',
+  'hint',
+  'dialogue-v2',
+  'hint-v2',
+  'dialogue-v3',
+  'hint-v3',
+]
 
 type PageTransitionProps = {
   page: PageId
@@ -48,7 +55,8 @@ export function PageTransition({
   const isJamesCircle =
     mode === 'circle' &&
     ((exitingPage === 'score' && page === 'hint') ||
-      (exitingPage === 'score-v2' && page === 'hint-v2'))
+      (exitingPage === 'score-v2' && page === 'hint-v2') ||
+      (exitingPage === 'score-v3' && page === 'hint-v3'))
 
   const durationMs = isJamesCircle
     ? PAGE_TRANSITION_CIRCLE_JAMES_MS

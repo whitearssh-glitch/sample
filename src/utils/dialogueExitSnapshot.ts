@@ -10,6 +10,7 @@ export type DialogueExitSnapshot = {
 const snapshots: Record<AppTrack, DialogueExitSnapshot | null> = {
   ver1: null,
   ver2: null,
+  ver3: null,
 }
 
 export function captureDialogueExitSnapshot(
@@ -34,4 +35,5 @@ export function clearDialogueExitSnapshot(track?: AppTrack) {
   }
   snapshots.ver1 = null
   snapshots.ver2 = null
+  snapshots.ver3 = null
 }

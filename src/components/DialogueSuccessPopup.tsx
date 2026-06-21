@@ -11,6 +11,7 @@ import {
   JAMES_DIALOGUE_POPUP_ENTRANCE,
 } from '../config/jamesDialoguePopupLayout'
 import { LEO_SUPER_FIREWORKS } from '../config/leoDialoguePopupLayout'
+import { LEO_SUPER_FIREWORKS_V3 } from '../config/leoDialoguePopupLayoutV3'
 import type { AppTrack } from '../types/pages'
 import {
   hasDialoguePopupEntrancePlayed,
@@ -24,20 +25,38 @@ import {
 } from '../utils/pageAudio'
 
 const V2 = '/assets/ver2/sources'
+const V3 = '/assets/ver3/sources'
 
+function alternateTrackBase(track: AppTrack): string | null {
+  if (track === 'ver2') return V2
+  if (track === 'ver3') return V3
+  return null
+}
+
+function buildAlternateAssets(base: string) {
+  return {
+    title: `${base}/score-good.png`,
+    ribbon: `${base}/score-ribbon.png`,
+    star: `${base}/score-star.png`,
+    next: `${base}/button-next.png`,
+  } as const
+}
+
+function buildLeoAssets(base: string) {
+  return {
+    sceneBg: '/assets/score-background.png',
+    confetti: '/assets/score-confetti.png',
+    title: `${base}/score-super.png`,
+    ribbon: `${base}/score-ribbon.png`,
+    star: `${base}/score-star.png`,
+    next: `${base}/button-next.png`,
+  } as const
+}
 const OLIVIA_ASSETS = {
   title: '/assets/score-good.png',
   ribbon: '/assets/score-ribbon.png',
   star: '/assets/score-star.png',
   next: '/assets/button-next.png',
-} as const
-
-const EMMA_ASSETS = {
-  ...OLIVIA_ASSETS,
-  title: `${V2}/score-good.png`,
-  ribbon: `${V2}/score-ribbon.png`,
-  star: `${V2}/score-star.png`,
-  next: `${V2}/button-next.png`,
 } as const
 
 const JAMES_ASSETS = {
@@ -47,14 +66,6 @@ const JAMES_ASSETS = {
   ribbon: '/assets/score-ribbon.png',
   star: '/assets/score-star.png',
   next: '/assets/button-next.png',
-} as const
-
-const LEO_ASSETS = {
-  ...JAMES_ASSETS,
-  title: `${V2}/score-super.png`,
-  ribbon: `${V2}/score-ribbon.png`,
-  star: `${V2}/score-star.png`,
-  next: `${V2}/button-next.png`,
 } as const
 
 type DialogueSuccessPopupProps = {
@@ -68,23 +79,27 @@ export function DialogueSuccessPopup({
   track = 'ver1',
   onNext,
 }: DialogueSuccessPopupProps) {
+  const alternateBase = alternateTrackBase(track)
+  const isAlternateTrack = alternateBase !== null
   const isJames = variant === 'james'
-  const isLeo = isJames && track === 'ver2'
+  const isLeo = isJames && isAlternateTrack
   const ribbon = isJames
-    ? track === 'ver2'
+    ? isAlternateTrack
       ? LEO_DIALOGUE_POPUP_RIBBON
       : JAMES_DIALOGUE_POPUP_RIBBON
-    : track === 'ver2'
+    : isAlternateTrack
       ? EMMA_DIALOGUE_POPUP_RIBBON
       : DIALOGUE_POPUP_RIBBON
   const entrance = isJames ? JAMES_DIALOGUE_POPUP_ENTRANCE : DIALOGUE_POPUP_ENTRANCE
   const assets = isJames
-    ? track === 'ver2'
-      ? LEO_ASSETS
+    ? isAlternateTrack
+      ? buildLeoAssets(alternateBase)
       : JAMES_ASSETS
-    : track === 'ver2'
-      ? EMMA_ASSETS
+    : isAlternateTrack
+      ? buildAlternateAssets(alternateBase)
       : OLIVIA_ASSETS
+  const leoFireworks =
+    track === 'ver3' ? LEO_SUPER_FIREWORKS_V3 : LEO_SUPER_FIREWORKS
   const skipEntrance = hasDialoguePopupEntrancePlayed(variant, track)
 
   useEffect(() => {
@@ -124,8 +139,8 @@ export function DialogueSuccessPopup({
   const popupClass = [
     'dialogue-popup',
     isJames ? 'dialogue-popup--james' : '',
-    !isJames && track === 'ver2' ? 'dialogue-popup--emma' : '',
-    isJames && track === 'ver2' ? 'dialogue-popup--leo' : '',
+    !isJames && isAlternateTrack ? 'dialogue-popup--emma' : '',
+    isJames && isAlternateTrack ? 'dialogue-popup--leo' : '',
     skipEntrance ? 'dialogue-popup--settled' : '',
   ]
     .filter(Boolean)
@@ -167,7 +182,7 @@ export function DialogueSuccessPopup({
         <div className="dialogue-popup__cluster" style={ribbonStyle}>
           <div className="dialogue-popup__title-wrap">
             {isLeo &&
-              LEO_SUPER_FIREWORKS.map((firework) => (
+              leoFireworks.map((firework) => (
                 <img
                   key={firework.id}
                   className={`dialogue-popup__firework dialogue-popup__firework--${firework.id} dialogue-popup__firework--glow-${firework.glow}`}

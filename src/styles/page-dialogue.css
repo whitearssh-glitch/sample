@@ -133,6 +133,16 @@
   height: auto;
 }
 
+.page-dialogue--v3 .page-dialogue__character-video {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  background: transparent;
+}
+
 .page-dialogue__replay {
   position: absolute;
   left: calc(var(--replay-x) / var(--design-w) * 100%);

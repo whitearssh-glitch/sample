@@ -6,6 +6,7 @@ export type DialoguePopupKind = 'olivia' | 'james'
 const entrancePlayed: Record<AppTrack, Record<DialoguePopupKind, boolean>> = {
   ver1: { olivia: false, james: false },
   ver2: { olivia: false, james: false },
+  ver3: { olivia: false, james: false },
 }
 
 export function hasDialoguePopupEntrancePlayed(
@@ -42,6 +43,7 @@ export function resetDialoguePopupSession(
   if (kind) {
     entrancePlayed.ver1[kind] = false
     entrancePlayed.ver2[kind] = false
+    entrancePlayed.ver3[kind] = false
     if (kind === 'olivia') resetOliviaPopupEntranceSfx()
     if (kind === 'james') resetJamesPopupEntranceSfx()
     return
@@ -50,6 +52,8 @@ export function resetDialoguePopupSession(
   entrancePlayed.ver1.james = false
   entrancePlayed.ver2.olivia = false
   entrancePlayed.ver2.james = false
+  entrancePlayed.ver3.olivia = false
+  entrancePlayed.ver3.james = false
   resetOliviaPopupEntranceSfx()
   resetJamesPopupEntranceSfx()
 }
