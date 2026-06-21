@@ -355,29 +355,32 @@ img {
   align-items: center;
   gap: 14px;
   width: 100%;
-  max-width: 220px;
+  max-width: 280px;
 }
 
 .page-main__button {
   width: 100%;
-  padding: 14px 32px;
+  padding: 14px 20px;
   border-radius: 999px;
-  background: #e91e63;
-  color: #fff;
+  background: #fff;
+  color: #64B5F6;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.92rem;
+  line-height: 1.25;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px #64B5F6;
 }
 
 .page-main__button--secondary {
   background: #fff;
-  color: #e91e63;
-  box-shadow: inset 0 0 0 2px #e91e63;
+  color: #F48FB1;
+  box-shadow: inset 0 0 0 2px #F48FB1;
 }
 
 .page-main__button--tertiary {
   background: #fff;
-  color: #7b1fa2;
-  box-shadow: inset 0 0 0 2px #7b1fa2;
+  color: #CE93D8;
+  box-shadow: inset 0 0 0 2px #CE93D8;
 }
 
 @media (min-width: 376px) {

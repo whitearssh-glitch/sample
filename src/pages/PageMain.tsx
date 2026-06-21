@@ -24,7 +24,7 @@ export function PageMain({
             onClick={onStartVer1}
             disabled={isTransitioning}
           >
-            ver 1
+            For preschoolers
           </Pressable>
           <Pressable
             variant="cta"
@@ -32,7 +32,7 @@ export function PageMain({
             onClick={onStartVer2}
             disabled={isTransitioning}
           >
-            ver 2
+            For all levels
           </Pressable>
           <Pressable
             variant="cta"
@@ -40,7 +40,7 @@ export function PageMain({
             onClick={onStartVer3}
             disabled={isTransitioning}
           >
-            ver 3
+            With animation
           </Pressable>
         </div>
       </section>
