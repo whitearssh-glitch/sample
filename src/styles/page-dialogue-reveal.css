@@ -20,6 +20,27 @@
   }
 }
 
+@keyframes dialogue-hint-in {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px) scale(0.94);
+  }
+  1% {
+    visibility: visible;
+  }
+  65% {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-2px) scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes hint-bulb-glow {
   0%,
   100% {
@@ -408,7 +429,8 @@
 }
 
 .page-dialogue--controls .page-dialogue__replay,
-.page-dialogue--controls .page-dialogue__hints,
+.page-dialogue--controls:not(.page-dialogue--v1):not(.page-dialogue--v2):not(.page-dialogue--v3)
+  .page-dialogue__hints,
 .page-dialogue--controls .page-dialogue__mic-area {
   opacity: 0;
 }
@@ -417,12 +439,81 @@
   animation: dialogue-control-in 0.42s ease-out forwards;
 }
 
-.page-dialogue--controls .page-dialogue__hints {
+.page-dialogue--controls:not(.page-dialogue--v1):not(.page-dialogue--v2):not(.page-dialogue--v3)
+  .page-dialogue__hints {
   animation: dialogue-control-in 0.42s 0.12s ease-out forwards;
 }
 
 .page-dialogue--controls .page-dialogue__mic-area {
   animation: dialogue-control-in 0.42s 0.24s ease-out forwards;
+}
+
+/* ver1/ver2/ver3 Emma — 리플레이·마이크 동시 → 1s 후 전구 → 0.5s 후 힌트 리듬 등장 */
+:is(.page-dialogue--v1, .page-dialogue--v2, .page-dialogue--v3).page-dialogue--controls
+  .page-dialogue__replay {
+  animation: dialogue-control-in 0.42s ease-out forwards;
+}
+
+:is(.page-dialogue--v1, .page-dialogue--v2, .page-dialogue--v3).page-dialogue--controls
+  .page-dialogue__mic-area {
+  animation: dialogue-control-in 0.42s ease-out forwards;
+}
+
+:is(.page-dialogue--v1, .page-dialogue--v2, .page-dialogue--v3).page-dialogue--controls
+  .page-dialogue__hints {
+  opacity: 1;
+  animation: none;
+}
+
+:is(.page-dialogue--v1, .page-dialogue--v2, .page-dialogue--v3).page-dialogue--controls
+  .page-dialogue__hint-bulb-wrap {
+  opacity: 0;
+  animation: dialogue-control-in 0.42s 1s ease-out forwards;
+}
+
+:is(.page-dialogue--v1, .page-dialogue--v2, .page-dialogue--v3).page-dialogue--controls
+  .page-dialogue__hint-bulb {
+  animation: hint-bulb-glow 2.2s 1s ease-in-out infinite;
+}
+
+:is(.page-dialogue--v1, .page-dialogue--v2, .page-dialogue--v3).page-dialogue--controls
+  .page-dialogue__hint-bulb-wrap::before {
+  opacity: 0;
+  animation: hint-bulb-halo 2.2s 1s ease-in-out infinite;
+}
+
+:is(.page-dialogue--v1, .page-dialogue--v2, .page-dialogue--v3).page-dialogue--controls
+  .page-dialogue__hint-chips {
+  visibility: hidden;
+  animation: dialogue-hint-chips-show 0s 1.5s step-start forwards;
+}
+
+:is(.page-dialogue--v1, .page-dialogue--v2, .page-dialogue--v3).page-dialogue--controls
+  .page-dialogue__hint-chips
+  .dialogue-hint {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease;
+}
+
+:is(.page-dialogue--v1, .page-dialogue--v2, .page-dialogue--v3).page-dialogue--controls
+  .page-dialogue__hint-chips
+  .dialogue-hint:nth-child(1) {
+  animation: dialogue-hint-in 0.38s 1.5s cubic-bezier(0.34, 1.35, 0.64, 1) both;
+}
+
+:is(.page-dialogue--v1, .page-dialogue--v2, .page-dialogue--v3).page-dialogue--controls
+  .page-dialogue__hint-chips
+  .dialogue-hint:nth-child(2) {
+  animation: dialogue-hint-in 0.38s 1.68s cubic-bezier(0.34, 1.35, 0.64, 1) both;
+}
+
+@keyframes dialogue-hint-chips-show {
+  to {
+    visibility: visible;
+  }
 }
 
 /* 제임스 대화 — 힌트 없음, 리플레이·마이크만 */
@@ -516,6 +607,13 @@
   filter: none;
 }
 
+.page-dialogue--frozen .page-dialogue__hint-chips,
+.page-dialogue--frozen .page-dialogue__hint-chips .dialogue-hint {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-dialogue .page-header,
   .page-dialogue__character-wrap,
@@ -569,5 +667,14 @@
   .page-dialogue__hint-bulb-wrap::before {
     animation: none !important;
     filter: drop-shadow(0 0 8px rgba(255, 193, 7, 0.6));
+  }
+
+  :is(.page-dialogue--v1, .page-dialogue--v2, .page-dialogue--v3) .page-dialogue__hint-chips,
+  :is(.page-dialogue--v1, .page-dialogue--v2, .page-dialogue--v3)
+    .page-dialogue__hint-chips
+    .dialogue-hint {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
   }
 }

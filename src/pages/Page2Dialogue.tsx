@@ -105,6 +105,7 @@ export function Page2Dialogue({
   const buildLiveSectionClass = () =>
     [
       'page-dialogue',
+      'page-dialogue--v1',
       'page-dialogue--hero',
       isVoicePlaying || showResponseVoiceHalo ? 'page-dialogue--voice' : '',
       isMicListening ? 'page-dialogue--mic-active' : '',

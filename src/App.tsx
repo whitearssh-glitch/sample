@@ -325,19 +325,6 @@ function App() {
     }
   }, [navigate, page])
 
-  const goToFlowHome = useCallback((home: 'intro' | 'intro-v2' | 'intro-v3') => {
-    setScoreWipeActive(false)
-    setExitingPage(null)
-    setDirection(null)
-    setMode(null)
-    setIsTransitioning(false)
-    clearDialogueExitSnapshot(trackForPage(home))
-    resetDialoguePopupSession(undefined, trackForPage(home))
-    resetScorePageIntroVoice()
-    stopIntroVoice()
-    setPage(home)
-  }, [])
-
   const goToMain = useCallback(() => {
     setScoreWipeActive(false)
     setExitingPage(null)
@@ -368,7 +355,7 @@ function App() {
         return (
           <Page1Intro
             onStart={goNext}
-            onClose={() => goToFlowHome('intro')}
+            onClose={goToMain}
             isTransitioning={isTransitioning}
           />
         )
@@ -376,7 +363,7 @@ function App() {
         return (
           <Page1IntroV2
             onStart={goNext}
-            onClose={() => goToFlowHome('intro-v2')}
+            onClose={goToMain}
             isTransitioning={isTransitioning}
           />
         )
@@ -384,14 +371,14 @@ function App() {
         return (
           <Page1IntroV3
             onStart={goNext}
-            onClose={() => goToFlowHome('intro-v3')}
+            onClose={goToMain}
             isTransitioning={isTransitioning}
           />
         )
       case 'dialogue':
         return (
           <Page2Dialogue
-            onClose={() => goToFlowHome('intro')}
+            onClose={goToMain}
             onNext={beginScoreWipe}
             active={dialogueOnScreen}
             transitionComplete={dialogueOnScreen && !isTransitioning}
@@ -400,7 +387,7 @@ function App() {
       case 'dialogue-v2':
         return (
           <Page2DialogueV2
-            onClose={() => goToFlowHome('intro-v2')}
+            onClose={goToMain}
             onNext={beginScoreWipe}
             active={dialogueOnScreen}
             transitionComplete={dialogueOnScreen && !isTransitioning}
@@ -409,7 +396,7 @@ function App() {
       case 'dialogue-v3':
         return (
           <Page2DialogueV3
-            onClose={() => goToFlowHome('intro-v3')}
+            onClose={goToMain}
             onNext={beginScoreWipe}
             active={dialogueOnScreen}
             transitionComplete={dialogueOnScreen && !isTransitioning}
@@ -419,7 +406,7 @@ function App() {
         return (
           <Page4Intro
             onGo={goNext}
-            onClose={() => goToFlowHome('intro')}
+            onClose={goToMain}
             isTransitioning={isTransitioning}
             suppressIntroAudio={scoreWipeActive && scoreWipeTarget === 'score'}
           />
@@ -428,7 +415,7 @@ function App() {
         return (
           <Page4IntroV2
             onGo={goNext}
-            onClose={() => goToFlowHome('intro-v2')}
+            onClose={goToMain}
             isTransitioning={isTransitioning}
           />
         )
@@ -436,14 +423,14 @@ function App() {
         return (
           <Page4IntroV3
             onGo={goNext}
-            onClose={() => goToFlowHome('intro-v3')}
+            onClose={goToMain}
             isTransitioning={isTransitioning}
           />
         )
       case 'hint':
         return (
           <Page5JamesDialogue
-            onClose={() => goToFlowHome('intro')}
+            onClose={goToMain}
             onNext={goToMain}
             active={jamesDialogueOnScreen}
             transitionComplete={jamesDialogueOnScreen && !isTransitioning}
@@ -452,7 +439,7 @@ function App() {
       case 'hint-v2':
         return (
           <Page5JamesDialogueV2
-            onClose={() => goToFlowHome('intro-v2')}
+            onClose={goToMain}
             onNext={goToMain}
             active={jamesDialogueOnScreen}
             transitionComplete={jamesDialogueOnScreen && !isTransitioning}
@@ -461,7 +448,7 @@ function App() {
       case 'hint-v3':
         return (
           <Page5JamesDialogueV3
-            onClose={() => goToFlowHome('intro-v3')}
+            onClose={goToMain}
             onNext={goToMain}
             active={jamesDialogueOnScreen}
             transitionComplete={jamesDialogueOnScreen && !isTransitioning}
@@ -496,7 +483,7 @@ function App() {
           <Page4Intro
             embedded
             onGo={goNext}
-            onClose={() => goToFlowHome('intro')}
+            onClose={goToMain}
             isTransitioning={isTransitioning}
           />
         </PageWipeOverlay>
@@ -509,7 +496,7 @@ function App() {
             deferBoxEnter
             scoreWipeDurationMs={PAGE_TRANSITION_PUSH_LEFT_MS}
             onGo={goNext}
-            onClose={() => goToFlowHome('intro-v2')}
+            onClose={goToMain}
             isTransitioning={isTransitioning}
           />
         </PageWipeOverlay>
@@ -521,7 +508,7 @@ function App() {
             deferBoxEnter
             scoreWipeDurationMs={PAGE_TRANSITION_PUSH_LEFT_MS}
             onGo={goNext}
-            onClose={() => goToFlowHome('intro-v3')}
+            onClose={goToMain}
             isTransitioning={isTransitioning}
           />
         </PageWipeOverlay>

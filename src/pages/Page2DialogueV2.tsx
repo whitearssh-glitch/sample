@@ -110,6 +110,7 @@ export function Page2DialogueV2({
     [
       'page-dialogue',
       'page-dialogue--emma',
+      'page-dialogue--v2',
       'page-dialogue--hero',
       isVoicePlaying || showResponseVoiceHalo ? 'page-dialogue--voice' : '',
       isMicListening ? 'page-dialogue--mic-active' : '',
